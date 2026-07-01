@@ -9,14 +9,14 @@
 <title>bill's brain</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
 <style>
-@font-face{font-family:"BillBauhaus";src:url("./Bauhaus2.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}
-@font-face{font-family:"BillBauhausAlt";src:url("./Bauhaus1.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:"BillBauhaus";src:url("./Bauhaus1.ttf") format("truetype"),url("./bauhaus1.ttf") format("truetype");font-weight:400 900;font-style:normal;font-display:swap;}
+@font-face{font-family:"BillBauhausAlt";src:url("./Bauhaus2.ttf") format("truetype"),url("./bauhaus2.ttf") format("truetype");font-weight:400 900;font-style:normal;font-display:swap;}
 :root{
   --bg0:#14232b; --bg1:#263a44; --bg2:#314650;
   --panel:#344a55cc; --panel2:#263b46ee; --well:#0b1a21;
   --line:#5f7884; --line2:#3d5560; --txt:#f3f7f9; --muted:#b7c3c9;
   --blue:#9ed9ef; --green:#8ee6bd; --shadow:rgba(0,0,0,.35);
-  --logo:'BillBauhaus','BillBauhausAlt','Bauhaus 93',system-ui,sans-serif; --body:'Nunito',system-ui,sans-serif;
+  --logo:'BillBauhaus','BillBauhausAlt',system-ui,sans-serif; --body:'Nunito',system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;width:100%;overflow:hidden;background:var(--bg0);color:var(--txt);font-family:var(--body)}
@@ -28,7 +28,7 @@ input[type=number]{-moz-appearance:textfield}
 .app{height:100%;display:flex;flex-direction:column;overflow:hidden}
 .top{flex:0 0 auto;padding:14px 15px 9px;background:linear-gradient(180deg,#111f27 0%,#14232bcc 100%);border-bottom:1px solid rgba(158,217,239,.12);box-shadow:0 10px 28px var(--shadow);z-index:5}
 .logo{text-align:center;margin:0 0 10px}
-.logo h1{font-family:var(--logo);font-size:clamp(2rem,10vw,3.25rem);font-weight:400;line-height:.95;letter-spacing:.01em;text-shadow:0 2px 0 rgba(0,0,0,.28),0 0 18px rgba(158,217,239,.1)}
+.logo h1{font-family:var(--logo);font-size:clamp(2rem,10vw,3.25rem);font-weight:800;line-height:.95;letter-spacing:.01em;text-shadow:0 2px 0 rgba(0,0,0,.28),0 0 18px rgba(158,217,239,.1)}
 .logo .white{color:var(--txt)}.logo .blue{color:#7fbfda}.logo.alt .white{color:#7fbfda}.logo.alt .blue{color:var(--txt)}
 .logo-line{height:7px;width:138px;border-radius:99px;margin:9px auto 0;background:linear-gradient(90deg,#7fbfda 0 50%,var(--txt) 50% 100%);box-shadow:0 0 16px rgba(158,217,239,.18)}.logo.alt .logo-line{background:linear-gradient(90deg,var(--txt) 0 50%,#7fbfda 50% 100%)}
 .subtitle{text-align:center;color:var(--muted);font-size:.72rem;font-weight:900;letter-spacing:.18em;text-transform:lowercase;margin-top:7px}
@@ -40,7 +40,7 @@ input[type=number]{-moz-appearance:textfield}
 .screen-title h2{font-size:.95rem;font-weight:900;letter-spacing:.15em;color:var(--blue);text-transform:lowercase}
 .screen-title span{font-size:.72rem;font-weight:900;color:#9ba9ae;letter-spacing:.12em;text-transform:lowercase}
 .card,.drawer-card{background:linear-gradient(180deg,rgba(72,94,105,.88),rgba(38,58,68,.92));border:1px solid rgba(158,217,239,.26);border-radius:26px;padding:16px;margin:0 0 15px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 12px 28px rgba(0,0,0,.22)}
-.etched{font-family:var(--logo);font-weight:400;color:#91a0a6;text-shadow:1px 1px 0 rgba(0,0,0,.88),-1px -1px 0 rgba(255,255,255,.16),0 0 7px rgba(0,0,0,.28);opacity:.96}
+.etched{font-family:var(--logo);font-weight:800;color:#91a0a6;text-shadow:1px 1px 0 rgba(0,0,0,.88),-1px -1px 0 rgba(255,255,255,.16),0 0 7px rgba(0,0,0,.28);opacity:.96}
 .card-head{display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.14);padding-bottom:12px;margin-bottom:12px}
 .icon{font-family:var(--body);font-size:1.55rem;width:38px;min-width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:rgba(12,32,41,.18);color:#8e9ca2;text-shadow:1px 1px 0 rgba(0,0,0,.9),-1px -1px 0 rgba(255,255,255,.13);box-shadow:inset 1px 1px 0 rgba(255,255,255,.07),inset -1px -1px 0 rgba(0,0,0,.62);opacity:.98}.icon.small{font-size:1.1rem;width:28px;min-width:28px;height:28px;border-radius:7px;margin-right:8px}.screen-title h2{display:flex;align-items:center;gap:7px}
 .card-title{font-size:1.35rem;line-height:1.1;font-family:var(--logo);letter-spacing:.01em}
@@ -72,9 +72,11 @@ input[type=number]{-moz-appearance:textfield}
 .drawer-handle{position:fixed;left:14px;bottom:calc(15px + env(safe-area-inset-bottom));z-index:20;border:1px solid rgba(255,255,255,.09);background:linear-gradient(180deg,rgba(58,76,86,.42),rgba(20,34,42,.72));box-shadow:inset 1px 1px 0 rgba(255,255,255,.09),inset -1px -1px 0 rgba(0,0,0,.72),0 9px 20px rgba(0,0,0,.3);border-radius:18px;padding:12px 17px;font-family:var(--logo);font-weight:400;color:#91a0a6;text-shadow:1px 1px 0 rgba(0,0,0,.9),-1px -1px 0 rgba(255,255,255,.14);letter-spacing:.02em;text-transform:lowercase}
 .drawer-handle:active{transform:translateY(2px)}
 .drawer-handle.hidden{display:none}
-.calc-display{height:132px;background:rgba(12,32,41,.52);border:1px solid rgba(158,217,239,.22);border-radius:26px;margin-bottom:16px;padding:16px;display:flex;align-items:flex-end;justify-content:flex-end;font-size:2.6rem;font-weight:900;overflow:hidden}
+.calc-display{height:132px;background:rgba(12,32,41,.52);border:1px solid rgba(158,217,239,.22);border-radius:26px;margin-bottom:16px;padding:16px;display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;overflow:hidden}
+.calc-expr{min-height:1.4rem;font-size:1.05rem;font-weight:900;color:var(--muted);letter-spacing:.04em;margin-bottom:8px;text-align:right;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.calc-main{font-size:2.6rem;font-weight:900;line-height:1;color:var(--txt);text-align:right;max-width:100%;overflow:hidden;text-overflow:ellipsis}
 .calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.btn{border:1px solid rgba(158,217,239,.2);background:linear-gradient(180deg,rgba(72,94,105,.85),rgba(31,49,58,.9));box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 7px 18px rgba(0,0,0,.18);border-radius:20px;min-height:64px;font-size:1.8rem;font-weight:900}.btn:active{transform:scale(.96)}.btn.op{color:var(--blue)}.btn.eq{background:var(--blue);color:#0b1a21}.btn.clear{color:var(--muted)}.btn.zero{grid-column:span 2}
-@media(max-width:430px){.screen{padding:12px 13px 86px}.top{padding:13px 13px 8px}.card,.drawer-card{border-radius:23px;padding:14px}.num{font-size:1.55rem;min-height:58px}.mini-num{font-size:1.35rem;min-height:56px}.tax-grid{gap:10px}.card-title{font-size:1.23rem}.hero .big{font-size:3.65rem}.row{padding:8px 0}.name{font-size:.92rem}.value{font-size:1rem}.chip{display:none}.calc-display{height:118px}.btn{min-height:60px}.summary{grid-template-columns:1fr 1fr}.sumcell.primary{grid-column:1/-1}.sumcell.primary .sumval{font-size:1.75rem}.hero .big{font-size:2.35rem}}
+@media(max-width:430px){.screen{padding:12px 13px 86px}.top{padding:13px 13px 8px}.card,.drawer-card{border-radius:23px;padding:14px}.num{font-size:1.55rem;min-height:58px}.mini-num{font-size:1.35rem;min-height:56px}.tax-grid{gap:10px}.card-title{font-size:1.23rem}.hero .big{font-size:3.65rem}.row{padding:8px 0}.name{font-size:.92rem}.value{font-size:1rem}.chip{display:none}.calc-display{height:118px}.calc-main{font-size:2.25rem}.calc-expr{font-size:.95rem}.btn{min-height:60px}.summary{grid-template-columns:1fr 1fr}.sumcell.primary{grid-column:1/-1}.sumcell.primary .sumval{font-size:1.75rem}.hero .big{font-size:2.35rem}}
 </style>
 </head>
 <body>
@@ -90,7 +92,7 @@ input[type=number]{-moz-appearance:textfield}
   </section>
 </header>
 <main class="deck" id="deck">
-<section class="screen" data-name="calc"><div class="screen-inner"><div class="screen-title"><h2 class="etched"><span class="icon small">▦</span>calculator</h2><span>side utility</span></div><div class="calc-display" id="calcDisplay">0</div><div class="calc-grid"><button class="btn clear" data-calc="clear">AC</button><button class="btn" data-calc="back">⌫</button><button class="btn op" data-op="%">%</button><button class="btn op" data-op="÷">÷</button><button class="btn" data-num="7">7</button><button class="btn" data-num="8">8</button><button class="btn" data-num="9">9</button><button class="btn op" data-op="×">×</button><button class="btn" data-num="4">4</button><button class="btn" data-num="5">5</button><button class="btn" data-num="6">6</button><button class="btn op" data-op="−">−</button><button class="btn" data-num="1">1</button><button class="btn" data-num="2">2</button><button class="btn" data-num="3">3</button><button class="btn op" data-op="+">+</button><button class="btn zero" data-num="0">0</button><button class="btn" data-calc="dot">.</button><button class="btn eq" data-calc="equals">=</button></div><p class="hint">swipe right for brain</p></div></section>
+<section class="screen" data-name="calc"><div class="screen-inner"><div class="screen-title"><h2 class="etched"><span class="icon small">▦</span>calculator</h2><span>side utility</span></div><div class="calc-display"><div class="calc-expr" id="calcExpr"></div><div class="calc-main" id="calcDisplay">0</div></div><div class="calc-grid"><button class="btn clear" data-calc="clear">AC</button><button class="btn" data-calc="back">⌫</button><button class="btn op" data-op="%">%</button><button class="btn op" data-op="÷">÷</button><button class="btn" data-num="7">7</button><button class="btn" data-num="8">8</button><button class="btn" data-num="9">9</button><button class="btn op" data-op="×">×</button><button class="btn" data-num="4">4</button><button class="btn" data-num="5">5</button><button class="btn" data-num="6">6</button><button class="btn op" data-op="−">−</button><button class="btn" data-num="1">1</button><button class="btn" data-num="2">2</button><button class="btn" data-num="3">3</button><button class="btn op" data-op="+">+</button><button class="btn zero" data-num="0">0</button><button class="btn" data-calc="dot">.</button><button class="btn eq" data-calc="equals">=</button></div><p class="hint">swipe right for brain</p></div></section>
 
 <section class="screen" data-name="main"><div class="screen-inner">
   <div id="hub" class="hub">
@@ -144,7 +146,45 @@ function recalcDim(){const a=val('dimA'), b=val('dimB'), u=$('dimUnit').value; c
 function openDrawer(id){const db=$('drawerBtn'); if(db) db.classList.remove('hidden'); activeDrawer=id; $('hub').classList.remove('active'); document.querySelectorAll('.drawer-view').forEach(el=>el.classList.toggle('active',el.id===id)); const names={money:'money & percent',measure:'measurements',tempvol:'temp & volume',speedarea:'speed & area'}; subtitle.textContent=names[id]||'bill’s brain'; pctPanel.style.display=id==='money'?'block':'none'; setLogo(id==='measure'||id==='speedarea'); document.querySelector('.screen[data-name="main"]').scrollTop=0}
 function showHub(){const db=$('drawerBtn'); if(db) db.classList.remove('hidden'); document.querySelectorAll('.drawer-view').forEach(el=>el.classList.remove('active')); $('hub').classList.add('active'); subtitle.textContent='drawers'; pctPanel.style.display='none'; setLogo(false); document.querySelector('.screen[data-name="main"]').scrollTop=0}
 document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>openDrawer(b.dataset.open))); $('drawerBtn').addEventListener('click',()=>{ if($('hub').classList.contains('active')) openDrawer(activeDrawer||'money'); else showHub();});
-let cur='0', prev=null, op=null, just=false; const nice=n=>{if(!Number.isFinite(n))return'0'; const s=String(Number(n.toFixed(10))); return s.length>14?Number(n).toPrecision(9):s}; function show(){set('calcDisplay',cur)} function calcNum(n){if(just){cur='0';just=false} cur=cur==='0'?n:(cur+n); if(cur.length>14)cur=cur.slice(0,14); show()} function calcOp(o){if(op!==null&&!just)calcEq(); prev=parseFloat(cur)||0; op=o; cur='0'; just=false; show()} function calcEq(){if(op===null||prev===null)return; const b=parseFloat(cur)||0; let r=prev; if(op==='+')r=prev+b; if(op==='−')r=prev-b; if(op==='×')r=prev*b; if(op==='÷')r=b===0?0:prev/b; if(op==='%')r=prev*(b/100); cur=nice(r); prev=null; op=null; just=true; show()} document.querySelectorAll('[data-num]').forEach(btn=>btn.addEventListener('click',()=>calcNum(btn.dataset.num))); document.querySelectorAll('[data-op]').forEach(btn=>btn.addEventListener('click',()=>calcOp(btn.dataset.op))); document.querySelectorAll('[data-calc]').forEach(btn=>btn.addEventListener('click',()=>{const c=btn.dataset.calc;if(c==='clear'){cur='0';prev=null;op=null;just=false} if(c==='back'){cur=cur.length>1?cur.slice(0,-1):'0'} if(c==='dot'&&!cur.includes('.'))cur+='.'; if(c==='equals')calcEq(); show()}));
+let cur='0', prev=null, op=null, just=false, lastExpr='';
+const nice=n=>{if(!Number.isFinite(n))return'0'; const s=String(Number(n.toFixed(10))); return s.length>14?Number(n).toPrecision(9):s};
+function calcSymbol(o){return o==='−'?'-':o}
+function show(){
+  const main = cur==='' && prev!==null ? nice(prev) : (cur || '0');
+  set('calcDisplay',main);
+  let expr='';
+  if(op!==null && prev!==null){expr = nice(prev)+' '+calcSymbol(op)+(cur!==''?' '+cur:'');}
+  else if(just && lastExpr){expr = lastExpr;}
+  set('calcExpr',expr);
+}
+function calcNum(n){
+  if(just){cur='0'; prev=null; op=null; just=false; lastExpr=''}
+  cur=(cur===''||cur==='0')?n:(cur+n);
+  if(cur.length>14)cur=cur.slice(0,14);
+  show();
+}
+function calcOp(o){
+  if(op!==null && cur!=='') calcEq(true);
+  prev=parseFloat(cur===''?'0':cur)||0;
+  op=o; cur=''; just=false; lastExpr=''; show();
+}
+function calcEq(keepChain=false){
+  if(op===null||prev===null||cur==='')return;
+  const b=parseFloat(cur)||0; let r=prev;
+  if(op==='+')r=prev+b; if(op==='−')r=prev-b; if(op==='×')r=prev*b; if(op==='÷')r=b===0?0:prev/b; if(op==='%')r=prev*(b/100);
+  lastExpr=nice(prev)+' '+calcSymbol(op)+' '+nice(b)+' =';
+  cur=nice(r); prev=null; op=null; just=!keepChain; show();
+}
+document.querySelectorAll('[data-num]').forEach(btn=>btn.addEventListener('click',()=>calcNum(btn.dataset.num)));
+document.querySelectorAll('[data-op]').forEach(btn=>btn.addEventListener('click',()=>calcOp(btn.dataset.op)));
+document.querySelectorAll('[data-calc]').forEach(btn=>btn.addEventListener('click',()=>{
+  const c=btn.dataset.calc;
+  if(c==='clear'){cur='0';prev=null;op=null;just=false;lastExpr=''}
+  if(c==='back'){if(just){cur='0';just=false;lastExpr=''} else cur=cur.length>1?cur.slice(0,-1):'0'}
+  if(c==='dot'){if(just){cur='0';just=false;lastExpr=''} if(cur==='')cur='0'; if(!cur.includes('.'))cur+='.'}
+  if(c==='equals')calcEq(false);
+  show();
+}));
 function home(){deck.style.scrollBehavior='auto'; deck.scrollLeft=deck.clientWidth; setTimeout(()=>{deck.scrollLeft=deck.clientWidth; deck.style.scrollBehavior='smooth'},60)}
 deck.addEventListener('scroll',()=>{const i=Math.round(deck.scrollLeft/deck.clientWidth); const db=$('drawerBtn'); if(i===0){subtitle.textContent='calculator'; pctPanel.style.display='none'; setLogo(true); if(db) db.classList.add('hidden')} else {if(db) db.classList.remove('hidden'); if(!$('hub').classList.contains('active')) openDrawer(activeDrawer||'money')}},{passive:true});
 recalc();recalcLen();recalcWt();recalcTemp();recalcVol();recalcSpd();recalcDim();show();openDrawer('money'); if(document.readyState==='complete')home(); else window.addEventListener('load',home); window.addEventListener('resize',()=>{deck.scrollLeft=deck.clientWidth});
