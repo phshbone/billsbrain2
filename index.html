@@ -7,16 +7,16 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="bill's brain"/>
 <title>bill's brain</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
 <style>
-@font-face{font-family:"BillBauhaus";src:url("./Bauhaus1.ttf") format("truetype"),url("./bauhaus1.ttf") format("truetype");font-weight:400 900;font-style:normal;font-display:swap;}
-@font-face{font-family:"BillBauhausAlt";src:url("./Bauhaus2.ttf") format("truetype"),url("./bauhaus2.ttf") format("truetype");font-weight:400 900;font-style:normal;font-display:swap;}
+@font-face{font-family:"BillBauhausHeavy";src:url("./Bauhaus-.ttf") format("truetype");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"BillBauhausLight";src:url("./Bauhaus1.ttf") format("truetype");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"BillBauhausThin";src:url("./Bauhaus2.ttf") format("truetype");font-weight:300;font-style:normal;font-display:block;}
 :root{
   --bg0:#14232b; --bg1:#263a44; --bg2:#314650;
   --panel:#344a55cc; --panel2:#263b46ee; --well:#0b1a21;
   --line:#5f7884; --line2:#3d5560; --txt:#f3f7f9; --muted:#b7c3c9;
   --blue:#9ed9ef; --green:#8ee6bd; --shadow:rgba(0,0,0,.35);
-  --logo:'BillBauhaus','BillBauhausAlt',system-ui,sans-serif; --body:'Nunito',system-ui,sans-serif;
+  --logo:"BillBauhausHeavy","Bauhaus-Heavy-Bold","BillBauhausLight","Bauhaus-Light-Light",system-ui,sans-serif; --body:'Nunito',system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;width:100%;overflow:hidden;background:var(--bg0);color:var(--txt);font-family:var(--body)}
@@ -77,7 +77,134 @@ input[type=number]{-moz-appearance:textfield}
 .calc-main{font-size:2.6rem;font-weight:900;line-height:1;color:var(--txt);text-align:right;max-width:100%;overflow:hidden;text-overflow:ellipsis}
 .calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.btn{border:1px solid rgba(158,217,239,.2);background:linear-gradient(180deg,rgba(72,94,105,.85),rgba(31,49,58,.9));box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 7px 18px rgba(0,0,0,.18);border-radius:20px;min-height:64px;font-size:1.8rem;font-weight:900}.btn:active{transform:scale(.96)}.btn.op{color:var(--blue)}.btn.eq{background:var(--blue);color:#0b1a21}.btn.clear{color:var(--muted)}.btn.zero{grid-column:span 2}
 @media(max-width:430px){.screen{padding:12px 13px 86px}.top{padding:13px 13px 8px}.card,.drawer-card{border-radius:23px;padding:14px}.num{font-size:1.55rem;min-height:58px}.mini-num{font-size:1.35rem;min-height:56px}.tax-grid{gap:10px}.card-title{font-size:1.23rem}.hero .big{font-size:3.65rem}.row{padding:8px 0}.name{font-size:.92rem}.value{font-size:1rem}.chip{display:none}.calc-display{height:118px}.calc-main{font-size:2.25rem}.calc-expr{font-size:.95rem}.btn{min-height:60px}.summary{grid-template-columns:1fr 1fr}.sumcell.primary{grid-column:1/-1}.sumcell.primary .sumval{font-size:1.75rem}.hero .big{font-size:2.35rem}}
+
+/* --- final Bauhaus enforcement / iOS-safe font patch --- */
+.logo h1,
+.card-title,
+.drawer-card .drawer-name,
+.drawer-handle,
+.etched{
+  font-family:var(--logo)!important;
+  font-weight:400!important;
+  -webkit-font-smoothing:antialiased;
+}
+.logo h1{
+  -webkit-text-stroke:.45px currentColor;
+  text-shadow:0 2px 0 rgba(0,0,0,.35),0 0 18px rgba(158,217,239,.12);
+}
+.card-title,
+.drawer-card .drawer-name,
+.drawer-handle,
+.etched{
+  -webkit-text-stroke:.22px currentColor;
+}
+
+
+/* --- definitive heavy Bauhaus patch --- */
+.logo h1,
+.card-title,
+.drawer-card .drawer-name,
+.drawer-handle,
+.etched,
+.screen-title h2{
+  font-family:"BillBauhausHeavy","Bauhaus-Heavy-Bold","BillBauhausLight",system-ui,sans-serif!important;
+  font-weight:700!important;
+}
+
 </style>
+
+<style>
+/* --- surgical strike: full-width machined drawer fronts --- */
+.hub .drawer-grid{
+  display:block;
+  margin:10px 0 0;
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid rgba(158,217,239,.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    inset 0 -1px 0 rgba(0,0,0,.7),
+    0 18px 34px rgba(0,0,0,.28);
+  background:linear-gradient(180deg,rgba(20,35,43,.72),rgba(9,20,26,.78));
+}
+.hub .drawer-card{
+  width:100%;
+  margin:0;
+  min-height:86px;
+  border:0;
+  border-radius:0;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:17px 19px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.065),rgba(255,255,255,0) 18%),
+    linear-gradient(180deg,rgba(70,93,104,.9),rgba(33,52,61,.96));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 -2px 0 rgba(0,0,0,.58),
+    inset 0 -10px 18px rgba(0,0,0,.12);
+  position:relative;
+}
+.hub .drawer-card + .drawer-card{
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.hub .drawer-card::before{
+  content:"";
+  position:absolute;
+  left:18px;
+  right:18px;
+  top:9px;
+  height:3px;
+  border-radius:99px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),transparent);
+  opacity:.55;
+}
+.hub .drawer-card::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:5px;
+  background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.36));
+  pointer-events:none;
+}
+.hub .drawer-card:active{
+  transform:translateY(1px);
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,0) 16%),
+    linear-gradient(180deg,rgba(53,75,86,.95),rgba(25,42,50,.98));
+}
+.hub .drawer-card .icon{
+  border-radius:8px;
+  background:rgba(8,21,28,.28);
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.10),
+    inset -1px -1px 0 rgba(0,0,0,.72);
+}
+.hub .drawer-card .drawer-name{
+  font-size:1.68rem;
+  line-height:1;
+}
+.hub .drawer-card .drawer-note{
+  margin-top:6px;
+}
+@media(max-width:430px){
+  .hub .drawer-grid{
+    margin:8px -2px 0;
+    border-radius:10px;
+  }
+  .hub .drawer-card{
+    min-height:84px;
+    padding:16px 17px;
+  }
+  .hub .drawer-card .drawer-name{
+    font-size:1.58rem;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="app">
