@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<meta name="apple-mobile-web-app-title" content="bill's brain"/>
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1024'%3E%3Crect width='1024' height='1024' rx='180' fill='%230a0a0a'/%3E%3Cstyle%3E@import url('https://fonts.googleapis.com/css2?family=Fredoka:wdth,wght@125,500%26display=swap');%3C/style%3E%3Ctext x='512' y='470' text-anchor='middle' font-family='Fredoka,sans-serif' font-weight='500' font-stretch='125%25' font-size='300' fill='%23f0f0f0'%3Ebill's%3C/text%3E%3Crect x='212' y='530' width='300' height='12' rx='6' fill='%237eb8d4'/%3E%3Crect x='512' y='530' width='300' height='12' rx='6' fill='%23f0f0f0'/%3E%3Ctext x='512' y='780' text-anchor='middle' font-family='Fredoka,sans-serif' font-weight='500' font-stretch='125%25' font-size='300' fill='%237eb8d4'%3Ebrain%3C/text%3E%3C/svg%3E"/>
+<title>bill's brain</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wdth,wght@125,500&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:"BillBauhaus";src:url("./Bauhaus2.ttf") format("truetype");font-display:swap;}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --blue:#7eb8d4;
+  --green:#7ec4a0;
+  --orange:#d4a47e;
+  --dim:#c8c8c8;
+  --border:#344955;
+  --card:#18272e;
+  --bg:#102028;
+  --panel:#223640;
+  --deep:#0b171d;
+  --fredoka:'BillBauhaus','Fredoka',sans-serif;
+  --nunito:'Nunito',sans-serif;
+}
+body{background:var(--bg);color:#f0f0f0;font-family:var(--nunito);overflow-x:hidden;min-height:100vh;max-width:100vw;}
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+input[type=number]{-moz-appearance:textfield;}
+
+/* ── sticky header ── */
+.sticky{position:sticky;top:0;z-index:100;background:var(--bg);padding:0.75rem 1rem 0.6rem;}
+
+/* ── logo ── */
+.logo{text-align:center;margin-bottom:0.5rem;}
+.logo h1{font-family:var(--fredoka);font-size:clamp(1.7rem,5.5vw,2.4rem);line-height:1.1;letter-spacing:0.02em;font-weight:500;font-stretch:125%;text-align:center;}
+.logo .w{color:#f0f0f0;}
+.logo .b{color:var(--blue);}
+.logo .g{color:var(--green);}
+.logo-line{width:44px;height:2.5px;margin:0.25rem auto;border-radius:2px;}
+
+/* ── control panel ── */
+.ctrl{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0.85rem 1rem;}
+.inputs-row{display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;margin-bottom:0.75rem;}
+.ctrl label{display:block;font-family:var(--nunito);font-size:0.65rem;font-weight:900;
+  letter-spacing:0.1em;color:var(--dim);text-transform:lowercase;margin-bottom:0.35rem;}
+.iw{position:relative;display:flex;align-items:center;}
+.iw .sym{position:absolute;color:var(--dim);font-family:var(--nunito);font-weight:700;pointer-events:none;font-size:1rem;}
+.sym.l{left:0.75rem;}.sym.r{right:0.75rem;}
+.ni{width:100%;background:#0d0d0d;border:1px solid #2a2a2a;color:#f0f0f0;
+  font-family:var(--nunito);font-weight:900;border-radius:7px;outline:none;
+  transition:border-color 0.2s,box-shadow 0.2s;font-size:1.5rem;padding:0.6rem 0.75rem;}
+.ni.hl{padding-left:1.75rem;}.ni.hr{padding-right:1.75rem;}
+.ni.sm{font-size:1rem;font-weight:700;padding:0.45rem 0.7rem;}
+.ni.sm.hr{padding-right:1.5rem;}
+.ni:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(126,184,212,0.12);}
+
+/* ── summary bar ── */
+.sumbar{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #1a1a1a;padding-top:0.65rem;}
+.sl{font-family:var(--nunito);font-size:0.58rem;font-weight:900;color:#999;
+  letter-spacing:0.08em;text-transform:lowercase;}
+.sv{font-family:var(--nunito);font-size:0.95rem;font-weight:900;color:var(--blue);margin-top:1px;}
+
+/* ── dots ── */
+.dots{display:flex;justify-content:center;gap:0.6rem;padding:0.5rem 0 0.25rem;}
+.dot{width:8px;height:8px;border-radius:50%;opacity:0.35;transition:all 0.25s;cursor:pointer;}
+.dot.active{opacity:1;transform:scale(1.35);}
+
+/* ── viewport ── */
+.vp{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;scrollbar-width:none;width:100%;}
+.vp::-webkit-scrollbar{display:none;}
+.screen{min-width:100%;width:100%;scroll-snap-align:start;
+  padding:0.5rem 1rem 2rem;display:flex;flex-direction:column;align-items:center;overflow-x:hidden;box-sizing:border-box;}
+
+/* ── section label ── */
+.slabel{font-family:var(--nunito);font-size:0.7rem;font-weight:900;
+  letter-spacing:0.12em;text-transform:lowercase;color:var(--blue);
+  margin:0.9rem 0 0.5rem 0.1rem;width:100%;}
+
+/* ── cards ── */
+.cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0.9rem;width:100%;min-width:0;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:0.85rem 1rem;transition:border-color 0.2s,transform 0.2s;}
+.card:hover{border-color:#2a3a44;transform:translateY(-1px);}
+.card.full{grid-column:1/-1;}
+.ch{display:flex;align-items:center;gap:0.55rem;margin-bottom:0.6rem;
+  padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
+.ci{font-size:1.15rem;}
+.ct{font-family:var(--nunito);font-size:1.05rem;font-weight:900;color:#e0e0e0;text-transform:lowercase;}
+.cs{font-family:var(--nunito);font-size:0.78rem;font-weight:900;color:#888;
+  text-transform:lowercase;letter-spacing:0.04em;margin-top:1px;}
+.cr{margin-left:auto;font-family:var(--nunito);font-size:0.6rem;font-weight:700;
+  color:#444;text-align:right;line-height:1.5;flex-shrink:0;white-space:nowrap;}
+
+/* ── data rows ── */
+.dr{display:flex;justify-content:space-between;align-items:baseline;padding:0.32rem 0;}
+.dr+.dr{border-top:1px solid var(--border);}
+.dl{font-family:var(--nunito);font-size:0.82rem;font-weight:700;color:var(--dim);
+  text-transform:lowercase;letter-spacing:0.02em;}
+.dv{font-family:var(--nunito);font-size:1rem;font-weight:700;color:#d0d0d0;}
+.dr.hl .dl{color:var(--blue);}
+.dr.hl .dv{font-size:1.1rem;color:var(--blue);font-weight:900;}
+
+/* ── retail two-col ── */
+.twocol{display:grid;grid-template-columns:1fr 1fr !important;gap:1.1rem;}
+.colhead{font-family:var(--nunito);font-size:0.82rem;font-weight:900;color:var(--blue);
+  text-transform:lowercase;letter-spacing:0.06em;margin-bottom:0.3rem;}
+
+/* ── conversion screen ── */
+.conv-screen-input{width:100%;margin-bottom:0.75rem;}
+.conv-section{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:1rem 1.1rem;width:100%;margin-bottom:0.75rem;}
+.conv-title{font-family:var(--nunito);font-weight:900;font-size:1.1rem;
+  margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);
+  text-transform:lowercase;}
+.conv-title .cw{color:#f0f0f0;}.conv-title .cb{color:var(--blue);}
+.conv-input-row{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:0.75rem;}
+.conv-col-label{font-family:var(--nunito);font-size:0.6rem;font-weight:900;
+  text-transform:lowercase;letter-spacing:0.07em;margin-bottom:0.3rem;}
+.conv-col-label.blue{color:var(--blue);}.conv-col-label.grn{color:var(--green);}
+.conv-rows{display:grid;grid-template-columns:1fr 1fr;gap:0;width:100%;}
+.conv-row-pair{display:contents;}
+.conv-from{font-family:var(--nunito);font-size:0.82rem;font-weight:700;
+  color:var(--dim);text-transform:lowercase;padding:0.4rem 0;border-top:1px solid var(--border);}
+.conv-to{font-family:var(--nunito);font-size:1rem;font-weight:900;
+  color:var(--green);text-align:right;padding:0.4rem 0;border-top:1px solid var(--border);}
+.conv-rows > :nth-child(1),
+.conv-rows > :nth-child(2){border-top:none;}
+
+/* sq ft calc */
+.sqft-calc{margin-top:0.6rem;padding-top:0.6rem;border-top:1px solid var(--border);}
+.sqft-label{font-family:var(--nunito);font-size:0.65rem;font-weight:900;color:#555;
+  text-transform:lowercase;letter-spacing:0.07em;margin-bottom:0.45rem;}
+.sqft-inputs{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:0.5rem;}
+.sqft-result{display:flex;justify-content:space-between;align-items:baseline;}
+.sqft-rl{font-family:var(--nunito);font-size:0.82rem;font-weight:700;color:var(--dim);text-transform:lowercase;}
+.sqft-rv{font-family:var(--nunito);font-size:1.1rem;font-weight:900;color:var(--green);}
+
+/* swipe hint */
+#s0{overflow-y:visible;}
+.twocol{display:grid;grid-template-columns:1fr 1fr !important;gap:1.1rem;width:100%;min-width:0;}
+.card.full{width:100%;min-width:0;overflow:hidden;}
+.hint{font-family:var(--nunito);font-size:0.62rem;font-weight:700;color:#383838;
+  text-align:center;letter-spacing:0.1em;text-transform:lowercase;margin-top:1.25rem;width:100%;}
+.footer{margin-top:0.75rem;font-family:var(--nunito);font-size:0.55rem;font-weight:700;
+  color:#2a2a2a;letter-spacing:0.08em;text-align:center;width:100%;}
+
+/* ── calculator screen ── */
+.calc-tape{background:#0d0d0d;border:1px solid #2a2a2a;border-radius:10px;
+  width:100%;min-height:140px;max-height:200px;overflow-y:auto;padding:0.75rem 1rem;
+  margin-bottom:0.75rem;display:flex;flex-direction:column;justify-content:flex-end;}
+.tape-line{font-family:var(--nunito);font-size:0.82rem;font-weight:700;
+  color:#444;text-align:right;line-height:1.6;}
+.tape-line.tape-result{color:var(--blue);font-size:1.3rem;font-weight:900;margin-top:0.25rem;}
+.tape-line.tape-cur{color:#d0d0d0;font-size:1.1rem;font-weight:900;}
+.calc-display{background:#0d0d0d;border:1px solid #2a2a2a;border-radius:10px;
+  width:100%;padding:0.85rem 1rem;margin-bottom:0.75rem;text-align:right;
+  font-family:var(--nunito);font-size:2rem;font-weight:900;color:#f0f0f0;
+  min-height:64px;overflow:hidden;}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0.55rem;width:100%;}
+.cb-btn{background:var(--card);border:1px solid var(--border);border-radius:10px;
+  font-family:var(--nunito);font-weight:900;font-size:1.3rem;color:#f0f0f0;
+  padding:0.9rem 0;text-align:center;cursor:pointer;
+  transition:background 0.15s,border-color 0.15s,transform 0.1s;user-select:none;}
+.cb-btn:active{transform:scale(0.93);}
+.cb-btn.op{color:var(--blue);border-color:#2a3a44;}
+.cb-btn.op:active{background:#1a2a34;}
+.cb-btn.eq{background:var(--blue);color:#0a0a0a;border-color:var(--blue);}
+.cb-btn.eq:active{background:#6aa8c4;}
+.cb-btn.clr{color:var(--orange);border-color:#3a2a1e;font-size:0.9rem;}
+.cb-btn.bk{color:#f0f0f0;font-size:1rem;}
+.cb-btn.zero{grid-column:span 2;}
+
+
+/* ── surgical gunmetal skin: visual only, original layout preserved ── */
+body{
+  background:
+    radial-gradient(circle at 20% 0%, rgba(126,184,212,.12), transparent 32%),
+    linear-gradient(145deg,#0f2028 0%,#20333c 48%,#14252d 100%);
+}
+.sticky{background:linear-gradient(180deg,#102028 0%,#0e1c23 100%);box-shadow:0 8px 24px rgba(0,0,0,.25);}
+.logo h1{font-family:var(--fredoka);font-weight:700;letter-spacing:.015em;text-shadow:0 2px 10px rgba(0,0,0,.25);}
+.logo-line{width:84px;height:4px;}
+.ctrl,.card,.conv-section,.calc-tape,.calc-display{
+  background:linear-gradient(180deg,rgba(43,62,72,.96),rgba(24,39,46,.98));
+  border-color:#496371;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 12px 28px rgba(0,0,0,.22);
+  border-radius:18px;
+}
+.ni,.cb-btn{
+  background:linear-gradient(180deg,#10212a,#09151b);
+  border-color:#2f4c5a;
+  box-shadow:inset 0 2px 8px rgba(0,0,0,.45);
+}
+.ni:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(126,184,212,.18), inset 0 2px 8px rgba(0,0,0,.45);}
+.sumbar,.ch,.dr+.dr,.conv-title,.conv-from,.conv-to,.sqft-calc{border-color:rgba(175,215,230,.17);}
+.sv,.dr.hl .dv,.conv-to,.sqft-rv{color:#aee8ff;}
+.hint,.footer{color:rgba(220,235,242,.35);}
+.split-row{margin-top:.55rem;padding-top:.55rem;border-top:1px solid rgba(175,215,230,.17);display:grid;grid-template-columns:1fr 1fr;gap:.65rem;align-items:end;}
+.split-row label{font-size:.62rem;font-weight:900;letter-spacing:.08em;text-transform:lowercase;color:var(--dim);display:block;margin-bottom:.3rem;}
+.split-result{text-align:right;}
+.split-result .dl{display:block;margin-bottom:.2rem;}
+.split-result .dv{font-size:1.15rem;font-weight:900;color:#aee8ff;}
+
+</style>
+</head>
+<body>
+
+<!-- ══ sticky header ══ -->
+<div class="sticky">
+  <!-- logo -->
+  <div class="logo">
+    <h1 id="logoText"><span class="w">bill's </span><span class="b">brain</span></h1>
+    <div class="logo-line" id="logoLine" style="background:linear-gradient(to right,var(--blue) 50%,#f0f0f0 50%);"></div>
+  </div>
+
+  <!-- inputs (screen 1 only) -->
+  <div class="ctrl" id="pctPanel">
+    <div class="inputs-row">
+      <div>
+        <label>base amount</label>
+        <div class="iw"><span class="sym l">$</span>
+          <input id="baseInput" class="ni hl" type="number" placeholder="0" oninput="recalc()"/>
+        </div>
+      </div>
+      <div>
+        <label>percentage</label>
+        <div class="iw">
+          <input id="pctInput" class="ni hr" type="number" placeholder="0" oninput="recalc()"/>
+          <span class="sym r">%</span>
+        </div>
+      </div>
+    </div>
+    <div class="sumbar">
+      <div><div class="sl">amount</div><div class="sv" id="sumBase">$0.00</div></div>
+      <div><div class="sl">rate</div><div class="sv" id="sumRate">0.00%</div></div>
+      <div><div class="sl">result</div><div class="sv" id="sumDelta">$0.00</div></div>
+      <div><div class="sl">remainder</div><div class="sv" id="sumRem">$0.00</div></div>
+    </div>
+  </div>
+
+  <!-- dots -->
+  <div class="dots" id="dots"></div>
+</div>
+
+<!-- ══ viewport ══ -->
+<div class="vp" id="vp">
+
+  <!-- ═ screen 0: calculator ═ -->
+  <div class="screen" id="sCalc">
+    <div class="slabel">🧮 calculator</div>
+    <div class="calc-tape" id="calcTape">
+      <div class="tape-line tape-cur" id="calcDisplay">0</div>
+    </div>
+    <div class="calc-grid">
+      <button class="cb-btn clr" onclick="calcClear()">AC</button>
+      <button class="cb-btn bk"  onclick="calcBack()">⌫</button>
+      <button class="cb-btn op"  onclick="calcOp('%')">%</button>
+      <button class="cb-btn op"  onclick="calcOp('÷')">÷</button>
+
+      <button class="cb-btn" onclick="calcNum('7')">7</button>
+      <button class="cb-btn" onclick="calcNum('8')">8</button>
+      <button class="cb-btn" onclick="calcNum('9')">9</button>
+      <button class="cb-btn op" onclick="calcOp('×')">×</button>
+
+      <button class="cb-btn" onclick="calcNum('4')">4</button>
+      <button class="cb-btn" onclick="calcNum('5')">5</button>
+      <button class="cb-btn" onclick="calcNum('6')">6</button>
+      <button class="cb-btn op" onclick="calcOp('−')">−</button>
+
+      <button class="cb-btn" onclick="calcNum('1')">1</button>
+      <button class="cb-btn" onclick="calcNum('2')">2</button>
+      <button class="cb-btn" onclick="calcNum('3')">3</button>
+      <button class="cb-btn op" onclick="calcOp('+')">+</button>
+
+      <button class="cb-btn zero" onclick="calcNum('0')">0</button>
+      <button class="cb-btn" onclick="calcDot()">.</button>
+      <button class="cb-btn eq"  onclick="calcEquals()">=</button>
+    </div>
+    <p class="hint">swipe right for percentages →</p>
+  </div>
+
+  <!-- ═ screen 1: percentage ═ -->
+  <div class="screen" id="s0">
+    <div class="slabel">⚡ quick calc</div>
+    <div class="cg">
+
+      <!-- tip -->
+      <div class="card">
+        <div class="ch">
+          <span class="ci">🍽️</span>
+          <div><div class="ct">tip calculator</div><div class="cs">dining & hospitality</div></div>
+          <span class="cr" id="remTip"></span>
+        </div>
+        <div class="dr"><span class="dl">calculated tip</span><span class="dv" id="tipAmt">$0.00</span></div>
+        <div class="dr hl"><span class="dl">total with tip</span><span class="dv" id="tipTotal">$0.00</span></div>
+        <div class="split-row">
+          <div>
+            <label>split between</label>
+            <input id="splitInput" class="ni sm" type="number" min="1" placeholder="1" value="1" oninput="recalc()"/>
+          </div>
+          <div class="split-result">
+            <span class="dl">each pays</span>
+            <span class="dv" id="splitEach">$0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- retail -->
+      <div class="card full">
+        <div class="ch" style="flex-wrap:wrap;gap:0.4rem;">
+          <span class="ci">🛍️</span>
+          <div style="flex:1"><div class="ct">retail & checkout</div><div class="cs">nj & pa tax · optional discount</div></div>
+          <div style="display:flex;align-items:center;gap:0.4rem;flex-shrink:0;">
+            <span style="font-family:var(--nunito);font-size:0.62rem;font-weight:900;color:var(--dim);text-transform:lowercase;white-space:nowrap;">discount %</span>
+            <div style="width:88px;" class="iw">
+              <input id="discInput" class="ni sm hr" type="number" placeholder="0" oninput="recalcRetail()"/>
+              <span class="sym r" style="font-size:0.82rem;">%</span>
+            </div>
+          </div>
+        </div>
+        <div class="twocol">
+          <div>
+            <div class="colhead">new jersey · 6.625%</div>
+            <div class="dr"><span class="dl" id="njLbl">item price</span><span class="dv" id="njPrice">$0.00</span></div>
+            <div class="dr" id="njSaveRow" style="display:none"><span class="dl" style="color:var(--green)">you saved</span><span class="dv" style="color:var(--green);font-weight:900" id="njSaved">$0.00</span></div>
+            <div class="dr"><span class="dl">nj sales tax</span><span class="dv" id="njTax">$0.00</span></div>
+            <div class="dr hl"><span class="dl">nj total</span><span class="dv" id="njTotal">$0.00</span></div>
+          </div>
+          <div>
+            <div class="colhead">pennsylvania · 6%</div>
+            <div class="dr"><span class="dl" id="paLbl">item price</span><span class="dv" id="paPrice">$0.00</span></div>
+            <div class="dr" id="paSaveRow" style="display:none"><span class="dl" style="color:var(--green)">you saved</span><span class="dv" style="color:var(--green);font-weight:900" id="paSaved">$0.00</span></div>
+            <div class="dr"><span class="dl">pa sales tax</span><span class="dv" id="paTax">$0.00</span></div>
+            <div class="dr hl"><span class="dl">pa total</span><span class="dv" id="paTotal">$0.00</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <p class="hint">← calculator · conversions →</p>
+    <p class="footer">nj 6.625% · pa 6% · all values real time</p>
+  </div>
+
+  <!-- ═ screen 2: length & weight ═ -->
+  <div class="screen" id="s1">
+    <!-- length & distance -->
+    <div class="conv-section">
+      <div class="conv-title"><span class="cb">length</span> <span style="color:#f0f0f0">·</span> <span class="cw">distance</span></div>
+      <div class="conv-input-row">
+        <div>
+          <div class="conv-col-label blue">enter value</div>
+          <div class="iw"><input id="lenInput" class="ni sm" type="number" placeholder="0" oninput="recalcLen()" style="padding:0.5rem 0.7rem;width:100%;"/></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 0.5rem;">
+        <div class="conv-col-label blue" style="padding-bottom:0.25rem;">from</div>
+        <div class="conv-col-label grn" style="padding-bottom:0.25rem;text-align:right;">to</div>
+        <div class="conv-from">inches →</div><div class="conv-to" id="inToCm">—</div>
+        <div class="conv-from">cm →</div><div class="conv-to" id="cmToIn">—</div>
+        <div class="conv-from">mm →</div><div class="conv-to" id="mmToIn">—</div>
+        <div class="conv-from">inches → mm</div><div class="conv-to" id="inToMm">—</div>
+        <div class="conv-from">feet →</div><div class="conv-to" id="ftToM">—</div>
+        <div class="conv-from">meters →</div><div class="conv-to" id="mToFt">—</div>
+        <div class="conv-from">yards →</div><div class="conv-to" id="ydToM">—</div>
+        <div class="conv-from">miles →</div><div class="conv-to" id="miToKm">—</div>
+        <div class="conv-from">km →</div><div class="conv-to" id="kmToMi">—</div>
+        <div class="conv-from">feet → cm</div><div class="conv-to" id="ftToCm">—</div>
+      </div>
+    </div>
+
+    <!-- weight & mass -->
+    <div class="conv-section">
+      <div class="conv-title"><span class="cw">weight</span> <span style="color:var(--blue)">·</span> <span class="cb">mass</span></div>
+      <div class="conv-input-row">
+        <div>
+          <div class="conv-col-label blue">enter value</div>
+          <div class="iw"><input id="wtInput" class="ni sm" type="number" placeholder="0" oninput="recalcWt()" style="padding:0.5rem 0.7rem;width:100%;"/></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 0.5rem;">
+        <div class="conv-col-label blue" style="padding-bottom:0.25rem;">from</div>
+        <div class="conv-col-label grn" style="padding-bottom:0.25rem;text-align:right;">to</div>
+        <div class="conv-from">pounds →</div><div class="conv-to" id="lbToKg">—</div>
+        <div class="conv-from">kilograms →</div><div class="conv-to" id="kgToLb">—</div>
+        <div class="conv-from">pounds → oz</div><div class="conv-to" id="lbToOz">—</div>
+        <div class="conv-from">ounces → lbs</div><div class="conv-to" id="ozToLb">—</div>
+        <div class="conv-from">ounces →</div><div class="conv-to" id="ozToG">—</div>
+        <div class="conv-from">grams →</div><div class="conv-to" id="gToOz">—</div>
+      </div>
+    </div>
+    <p class="hint">← swipe · more conversions →</p>
+  </div>
+
+  <!-- ═ screen 3: temperature & volume ═ -->
+  <div class="screen" id="s2">
+    <!-- temperature -->
+    <div class="conv-section">
+      <div class="conv-title"><span class="cb">temp</span><span class="cw">erature</span></div>
+      <div class="conv-input-row">
+        <div>
+          <div class="conv-col-label blue">enter value</div>
+          <div class="iw"><input id="tempInput" class="ni sm" type="number" placeholder="0" oninput="recalcTemp()" style="padding:0.5rem 0.7rem;width:100%;"/></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 0.5rem;">
+        <div class="conv-col-label blue" style="padding-bottom:0.25rem;">from</div>
+        <div class="conv-col-label grn" style="padding-bottom:0.25rem;text-align:right;">to</div>
+        <div class="conv-from">fahrenheit →</div><div class="conv-to" id="fToC">—</div>
+        <div class="conv-from">celsius →</div><div class="conv-to" id="cToF">—</div>
+      </div>
+    </div>
+
+    <!-- volume -->
+    <div class="conv-section">
+      <div class="conv-title"><span class="cw">vol</span><span class="cb">ume</span></div>
+      <div class="conv-input-row">
+        <div>
+          <div class="conv-col-label blue">enter value</div>
+          <div class="iw"><input id="volInput" class="ni sm" type="number" placeholder="0" oninput="recalcVol()" style="padding:0.5rem 0.7rem;width:100%;"/></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 0.5rem;">
+        <div class="conv-col-label blue" style="padding-bottom:0.25rem;">from</div>
+        <div class="conv-col-label grn" style="padding-bottom:0.25rem;text-align:right;">to</div>
+        <div class="conv-from">gallons →</div><div class="conv-to" id="galToL">—</div>
+        <div class="conv-from">liters →</div><div class="conv-to" id="lToGal">—</div>
+        <div class="conv-from">ml → cups</div><div class="conv-to" id="mlToCup">—</div>
+        <div class="conv-from">cups → ml</div><div class="conv-to" id="cupToMl">—</div>
+      </div>
+    </div>
+    <p class="hint">← swipe · more conversions →</p>
+  </div>
+
+  <!-- ═ screen 4: speed & area ═ -->
+  <div class="screen" id="s3">
+    <!-- speed -->
+    <div class="conv-section">
+      <div class="conv-title"><span class="cb">speed</span></div>
+      <div class="conv-input-row">
+        <div>
+          <div class="conv-col-label blue">enter value</div>
+          <div class="iw"><input id="spdInput" class="ni sm" type="number" placeholder="0" oninput="recalcSpd()" style="padding:0.5rem 0.7rem;width:100%;"/></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 0.5rem;">
+        <div class="conv-col-label blue" style="padding-bottom:0.25rem;">from</div>
+        <div class="conv-col-label grn" style="padding-bottom:0.25rem;text-align:right;">to</div>
+        <div class="conv-from">mph →</div><div class="conv-to" id="mphToKph">—</div>
+        <div class="conv-from">kph →</div><div class="conv-to" id="kphToMph">—</div>
+      </div>
+    </div>
+
+    <!-- dimensions converter -->
+    <div class="conv-section">
+      <div class="conv-title"><span class="cb">dimensions</span> <span style="color:#f0f0f0">·</span> <span class="cw">converter</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:0.75rem;">
+        <div><div class="conv-col-label blue" style="margin-bottom:0.4rem;">millimeters</div><input id="dimMm1" class="ni sm" type="number" placeholder="0" oninput="convertDim('mm')" style="padding:0.5rem 0.65rem;width:100%;margin-bottom:0.25rem;"/><input id="dimMm2" class="ni sm" type="number" placeholder="0" oninput="convertDim('mm')" style="padding:0.5rem 0.65rem;width:100%;"/></div>
+        <div><div class="conv-col-label grn" style="margin-bottom:0.4rem;">centimeters</div><input id="dimCm1" class="ni sm" type="number" placeholder="0" oninput="convertDim('cm')" style="padding:0.5rem 0.65rem;width:100%;margin-bottom:0.25rem;"/><input id="dimCm2" class="ni sm" type="number" placeholder="0" oninput="convertDim('cm')" style="padding:0.5rem 0.65rem;width:100%;"/></div>
+        <div><div class="conv-col-label blue" style="margin-bottom:0.4rem;">inches</div><input id="dimIn1" class="ni sm" type="number" placeholder="0" oninput="convertDim('in')" style="padding:0.5rem 0.65rem;width:100%;margin-bottom:0.25rem;"/><input id="dimIn2" class="ni sm" type="number" placeholder="0" oninput="convertDim('in')" style="padding:0.5rem 0.65rem;width:100%;"/></div>
+        <div><div class="conv-col-label grn" style="margin-bottom:0.4rem;">feet</div><input id="dimFt1" class="ni sm" type="number" placeholder="0" oninput="convertDim('ft')" style="padding:0.5rem 0.65rem;width:100%;margin-bottom:0.25rem;"/><input id="dimFt2" class="ni sm" type="number" placeholder="0" oninput="convertDim('ft')" style="padding:0.5rem 0.65rem;width:100%;"/></div>
+      </div>
+    </div>
+    <p class="hint">← swipe back to start</p>
+    <p class="footer">all values real time</p>
+  </div>
+
+  <!-- ═ ghost screen: auto-snaps back to screen 1 ═ -->
+  <div class="screen" id="sGhost" style="justify-content:center;align-items:center;min-height:60vh;">
+    <div style="text-align:center;opacity:0.25;">
+      <div style="font-family:var(--fredoka);font-size:2rem;color:var(--blue);margin-bottom:0.5rem;">↩</div>
+      <div style="font-family:var(--nunito);font-size:0.75rem;font-weight:700;color:var(--dim);text-transform:lowercase;letter-spacing:0.1em;">heading back...</div>
+    </div>
+  </div>
+
+</div><!-- /vp -->
+
+<script>
+const NJ=0.06625,PA=0.06;
+const screens=5; // real screens for dots
+
+// ── logo config per screen ──
+const logoConfig=[
+  {a:'bill\'s ',ac:'w',b:'calc',bc:'b',line:'linear-gradient(to right,var(--blue) 50%,#f0f0f0 50%)'},
+  {a:'bill\'s ',ac:'w',b:'brain',bc:'b',line:'linear-gradient(to right,var(--blue) 50%,#f0f0f0 50%)'},
+  {a:'length ',ac:'b',b:'weight',bc:'w',line:'linear-gradient(to right,#f0f0f0 50%,var(--blue) 50%)'},
+  {a:'temp',ac:'b',b:'erature',bc:'w',line:'linear-gradient(to right,#f0f0f0 50%,var(--blue) 50%)'},
+  {a:'speed ',ac:'b',b:'area',bc:'w',line:'linear-gradient(to right,#f0f0f0 50%,var(--blue) 50%)'},
+];
+
+// ── dots ──
+const dotsEl=document.getElementById('dots');
+const dotColors=['var(--blue)','var(--blue)','#f0f0f0','var(--blue)','#f0f0f0'];
+for(let i=0;i<screens;i++){
+  const d=document.createElement('div');
+  d.className='dot'+(i===1?' active':'');
+  d.style.background=dotColors[i];
+  d.addEventListener('click',()=>goTo(i));
+  dotsEl.appendChild(d);
+}
+
+function goTo(i){
+  document.getElementById('vp').scrollTo({left:i*window.innerWidth,behavior:'smooth'});
+}
+
+// ── track active screen ──
+let curScreen=1;
+let snapTimer=null;
+const vp=document.getElementById('vp');
+
+function snapBackToStart(){
+  vp.style.scrollSnapType='none';
+  vp.scrollLeft=window.innerWidth; // back to percentage screen (index 1)
+  setTimeout(()=>{ vp.style.scrollSnapType='x mandatory'; },30);
+  curScreen=1;
+  updateScreen(1);
+}
+
+// Use scrollend if available (fires instantly when snap settles)
+// Fall back to scroll + timer for older iOS
+if('onscrollend' in window){
+  vp.addEventListener('scrollend',()=>{
+    const idx=Math.round(vp.scrollLeft/vp.clientWidth);
+    if(idx===5){ snapBackToStart(); return; }
+    if(idx!==curScreen){ curScreen=idx; updateScreen(idx); }
+  });
+} else {
+  vp.addEventListener('scroll',()=>{
+    const idx=Math.round(vp.scrollLeft/vp.clientWidth);
+    if(idx===5){
+      if(snapTimer) clearTimeout(snapTimer);
+      snapTimer=setTimeout(snapBackToStart, 100);
+      return;
+    }
+    if(idx!==curScreen){ curScreen=idx; updateScreen(idx); }
+  },{passive:true});
+}
+
+function updateScreen(idx){
+  // dots
+  document.querySelectorAll('.dot').forEach((d,i)=>{
+    d.classList.toggle('active',i===idx);
+  });
+  // logo
+  const cfg=logoConfig[idx]||logoConfig[0];
+  document.getElementById('logoText').innerHTML=
+    `<span class="${cfg.ac}">${cfg.a}</span><span class="${cfg.bc}">${cfg.b}</span>`;
+  document.getElementById('logoLine').style.background=cfg.line;
+  // show/hide pct panel
+  document.getElementById('pctPanel').style.display=idx===1?'block':'none';
+}
+
+// ── helpers ──
+function fmt$(n){return'$'+Math.abs(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
+function fmtN(n,d=2){return n.toFixed(d).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
+function fmtP(n){return n.toFixed(2)+'%';}
+function set(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
+function getV(id){return parseFloat(document.getElementById(id).value)||0;}
+
+// ── screen 1: percentage ──
+function recalcRetail(){
+  const b=getV('baseInput'),disc=getV('discInput');
+  const sub=Math.max(0,b-b*(disc/100));
+  const saved=disc>0?b-sub:0;
+  const lbl=disc>0?'after discount':'item price';
+  const pc=disc>0?'var(--orange)':'#d0d0d0';
+  document.getElementById('njLbl').textContent=lbl;
+  document.getElementById('paLbl').textContent=lbl;
+  document.getElementById('njPrice').style.color=pc;
+  document.getElementById('paPrice').style.color=pc;
+  document.getElementById('njSaveRow').style.display=disc>0?'flex':'none';
+  document.getElementById('paSaveRow').style.display=disc>0?'flex':'none';
+  set('njSaved',fmt$(saved));set('paSaved',fmt$(saved));
+  set('njPrice',fmt$(sub));set('njTax',fmt$(sub*NJ));set('njTotal',fmt$(sub+sub*NJ));
+  set('paPrice',fmt$(sub));set('paTax',fmt$(sub*PA));set('paTotal',fmt$(sub+sub*PA));
+}
+
+function recalc(){
+  const b=getV('baseInput'),p=getV('pctInput');
+  const d=b*(p/100);
+  set('sumBase',fmt$(b));set('sumRate',fmtP(p));
+  set('sumDelta',fmt$(d));set('sumRem',fmt$(Math.max(0,b-d)));
+  const rem=b>0||p>0?fmt$(b)+' · '+fmtP(p):'';
+  document.querySelectorAll('.cr').forEach(e=>e.textContent=rem);
+  set('tipAmt',fmt$(d));set('tipTotal',fmt$(b+d));
+  const split=Math.max(1,Math.floor(getV('splitInput')||1));
+  set('splitEach',fmt$((b+d)/split));
+  recalcRetail();
+}
+
+// ── screen 2: length ──
+function recalcLen(){
+  const v=getV('lenInput');
+  set('inToCm',fmtN(v*2.54)+' cm');
+  set('cmToIn',fmtN(v/2.54)+' in');
+  set('mmToIn',fmtN(v/25.4)+' in');
+  set('inToMm',fmtN(v*25.4)+' mm');
+  set('ftToM',fmtN(v*0.3048)+' m');
+  set('mToFt',fmtN(v/0.3048)+' ft');
+  set('ydToM',fmtN(v*0.9144)+' m');
+  set('miToKm',fmtN(v*1.60934)+' km');
+  set('kmToMi',fmtN(v/1.60934)+' mi');
+  set('ftToCm',fmtN(v*30.48)+' cm');
+}
+
+// ── screen 2: weight ──
+function recalcWt(){
+  const v=getV('wtInput');
+  set('lbToKg',fmtN(v*0.453592)+' kg');
+  set('kgToLb',fmtN(v*2.20462)+' lbs');
+  set('lbToOz',fmtN(v*16)+' oz');
+  set('ozToLb',fmtN(v/16)+' lbs');
+  set('ozToG',fmtN(v*28.3495)+' g');
+  set('gToOz',fmtN(v/28.3495)+' oz');
+}
+
+// ── screen 3: temperature ──
+function recalcTemp(){
+  const v=getV('tempInput');
+  set('fToC',fmtN((v-32)*5/9)+' °c');
+  set('cToF',fmtN((v*9/5)+32)+' °f');
+}
+
+// ── screen 3: volume ──
+function recalcVol(){
+  const v=getV('volInput');
+  set('galToL',fmtN(v*3.78541)+' l');
+  set('lToGal',fmtN(v/3.78541)+' gal');
+  set('mlToCup',fmtN(v/236.588)+' cups');
+  set('cupToMl',fmtN(v*236.588)+' ml');
+}
+
+// ── screen 4: speed ──
+function recalcSpd(){
+  const v=getV('spdInput');
+  set('mphToKph',fmtN(v*1.60934)+' kph');
+  set('kphToMph',fmtN(v/1.60934)+' mph');
+}
+
+// ── screen 4: dimensions converter ──
+function convertDim(unit){
+  let val1, val2;
+  if(unit==='mm'){ val1=getV('dimMm1'); val2=getV('dimMm2'); }
+  else if(unit==='cm'){ val1=getV('dimCm1'); val2=getV('dimCm2'); }
+  else if(unit==='in'){ val1=getV('dimIn1'); val2=getV('dimIn2'); }
+  else if(unit==='ft'){ val1=getV('dimFt1'); val2=getV('dimFt2'); }
+  
+  // Convert to mm first
+  let mm1, mm2;
+  if(unit==='mm'){ mm1=val1; mm2=val2; }
+  else if(unit==='cm'){ mm1=val1*10; mm2=val2*10; }
+  else if(unit==='in'){ mm1=val1*25.4; mm2=val2*25.4; }
+  else if(unit==='ft'){ mm1=val1*304.8; mm2=val2*304.8; }
+  
+  // Convert to all units
+  const cm1=mm1/10, cm2=mm2/10;
+  const in1=mm1/25.4, in2=mm2/25.4;
+  const ft1=mm1/304.8, ft2=mm2/304.8;
+  
+  // Update all fields (without triggering input events)
+  document.getElementById('dimMm1').value=mm1>0?fmtN(mm1,2):'';
+  document.getElementById('dimMm2').value=mm2>0?fmtN(mm2,2):'';
+  document.getElementById('dimCm1').value=cm1>0?fmtN(cm1,2):'';
+  document.getElementById('dimCm2').value=cm2>0?fmtN(cm2,2):'';
+  document.getElementById('dimIn1').value=in1>0?fmtN(in1,2):'';
+  document.getElementById('dimIn2').value=in2>0?fmtN(in2,2):'';
+  document.getElementById('dimFt1').value=ft1>0?fmtN(ft1,2):'';
+  document.getElementById('dimFt2').value=ft2>0?fmtN(ft2,2):'';
+}
+
+// ── calculator ──
+let calcCur='0', calcPrev='', calcOperator='', calcJustEvaled=false;
+const tape=[];
+
+function calcUpdateDisplay(){
+  document.getElementById('calcDisplay').textContent=calcCur;
+}
+
+function calcNum(n){
+  if(calcJustEvaled){ calcCur='0'; calcJustEvaled=false; }
+  if(calcCur==='0'&&n!=='.')calcCur=n;
+  else if(calcCur.length<12)calcCur+=n;
+  calcUpdateDisplay();
+}
+
+function calcDot(){
+  if(calcJustEvaled){ calcCur='0'; calcJustEvaled=false; }
+  if(!calcCur.includes('.'))calcCur+='.';
+  calcUpdateDisplay();
+}
+
+function calcBack(){
+  if(calcJustEvaled){ calcCur='0'; calcUpdateDisplay(); return; }
+  calcCur=calcCur.length>1?calcCur.slice(0,-1):'0';
+  calcUpdateDisplay();
+}
+
+function calcClear(){
+  calcCur='0'; calcPrev=''; calcOperator=''; calcJustEvaled=false;
+  tape.length=0;
+  const t=document.getElementById('calcTape');
+  t.innerHTML='<div class="tape-line tape-cur" id="calcDisplay">0</div>';
+}
+
+function calcOp(op){
+  if(calcOperator&&!calcJustEvaled) calcDoEval(false);
+  calcPrev=calcCur; calcOperator=op; calcJustEvaled=false;
+  calcCur='0'; calcUpdateDisplay();
+}
+
+function calcDoEval(addToTape){
+  const a=parseFloat(calcPrev), b=parseFloat(calcCur);
+  let result;
+  if(calcOperator==='÷') result=b!==0?a/b:0;
+  else if(calcOperator==='×') result=a*b;
+  else if(calcOperator==='−') result=a-b;
+  else if(calcOperator==='+') result=a+b;
+  else if(calcOperator==='%') result=a*(b/100);
+  else return;
+  const nice=n=>parseFloat(n.toFixed(10)).toString();
+  if(addToTape){
+    const t=document.getElementById('calcTape');
+    const line=document.createElement('div');
+    line.className='tape-line';
+    line.textContent=`${nice(a)} ${calcOperator} ${nice(b)} =`;
+    const res=document.createElement('div');
+    res.className='tape-line tape-result';
+    res.textContent=nice(result);
+    t.insertBefore(res,t.lastChild);
+    t.insertBefore(line,res);
+    t.scrollTop=t.scrollHeight;
+  }
+  calcCur=nice(result);
+  calcUpdateDisplay();
+}
+
+function calcEquals(){
+  if(!calcOperator) return;
+  calcDoEval(true);
+  calcPrev=''; calcOperator=''; calcJustEvaled=true;
+}
+
+// scroll to percentage screen (index 1) on load — no animation
+window.addEventListener('load',()=>{
+  document.getElementById('vp').scrollLeft=window.innerWidth;
+  updateScreen(1);
+});
+
+recalc();
+</script>
+</body>
+</html>
