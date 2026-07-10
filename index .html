@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="bill's brain"/>
+<title>bill's brain</title>
+<style>
+@font-face{font-family:"BillBauhausMid";src:url("./Bauhaus2.ttf") format("truetype");font-weight:400;font-style:normal;font-display:block;}
+
+@font-face{font-family:"BillBauhausHeavy";src:url("./Bauhaus-.ttf") format("truetype");font-weight:700;font-style:normal;font-display:block;}
+@font-face{font-family:"BillBauhausLight";src:url("./Bauhaus1.ttf") format("truetype");font-weight:400;font-style:normal;font-display:block;}
+@font-face{font-family:"BillBauhausThin";src:url("./Bauhaus2.ttf") format("truetype");font-weight:300;font-style:normal;font-display:block;}
+:root{
+  --bg0:#14232b; --bg1:#263a44; --bg2:#314650;
+  --panel:#344a55cc; --panel2:#263b46ee; --well:#0b1a21;
+  --line:#5f7884; --line2:#3d5560; --txt:#f3f7f9; --muted:#b7c3c9;
+  --blue:#9ed9ef; --green:#8ee6bd; --shadow:rgba(0,0,0,.35);
+  --logo:"BillBauhausMid","Bauhaus-Thin","BillBauhausLight","Bauhaus-Light-Light",system-ui,sans-serif; --body:'Nunito',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;width:100%;overflow:hidden;background:var(--bg0);color:var(--txt);font-family:var(--body)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(135deg,var(--bg0),var(--bg1) 50%,var(--bg2));z-index:-2}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(115deg,rgba(255,255,255,.025) 0 1px,transparent 1px 22px);opacity:.35;z-index:-1}
+input,select,button{font:inherit;color:inherit}
+input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield}
+.app{height:100%;display:flex;flex-direction:column;overflow:hidden}
+.top{flex:0 0 auto;padding:14px 15px 9px;background:linear-gradient(180deg,#111f27 0%,#14232bcc 100%);border-bottom:1px solid rgba(158,217,239,.12);box-shadow:0 10px 28px var(--shadow);z-index:5}
+.logo{text-align:center;margin:0 0 10px}
+.logo h1{font-family:var(--logo);font-size:clamp(2rem,10vw,3.25rem);font-weight:800;line-height:.95;letter-spacing:.01em;text-shadow:0 2px 0 rgba(0,0,0,.28),0 0 18px rgba(158,217,239,.1)}
+.logo .white{color:var(--txt)}.logo .blue{color:#7fbfda}.logo.alt .white{color:#7fbfda}.logo.alt .blue{color:var(--txt)}
+.logo-line{height:7px;width:138px;border-radius:99px;margin:9px auto 0;background:linear-gradient(90deg,#7fbfda 0 50%,var(--txt) 50% 100%);box-shadow:0 0 16px rgba(158,217,239,.18)}.logo.alt .logo-line{background:linear-gradient(90deg,var(--txt) 0 50%,#7fbfda 50% 100%)}
+.subtitle{text-align:center;color:var(--muted);font-size:.72rem;font-weight:900;letter-spacing:.18em;text-transform:lowercase;margin-top:7px}
+.deck{flex:1;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-snap-stop:always;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;touch-action:pan-y pinch-zoom;overscroll-behavior-x:contain}
+.deck::-webkit-scrollbar{display:none}
+.screen{flex:0 0 100%;width:100%;height:100%;overflow-y:auto;scroll-snap-align:start;scroll-snap-stop:always;padding:14px 14px 88px}
+.screen-inner{max-width:760px;margin:0 auto}
+.screen-title{display:flex;align-items:baseline;justify-content:space-between;margin:2px 4px 14px}
+.screen-title h2{font-size:.95rem;font-weight:900;letter-spacing:.15em;color:var(--blue);text-transform:lowercase}
+.screen-title span{font-size:.72rem;font-weight:900;color:#9ba9ae;letter-spacing:.12em;text-transform:lowercase}
+.card,.drawer-card{background:linear-gradient(180deg,rgba(72,94,105,.88),rgba(38,58,68,.92));border:1px solid rgba(158,217,239,.26);border-radius:26px;padding:16px;margin:0 0 15px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 12px 28px rgba(0,0,0,.22)}
+.etched{font-family:var(--logo);font-weight:800;color:#91a0a6;text-shadow:1px 1px 0 rgba(0,0,0,.88),-1px -1px 0 rgba(255,255,255,.16),0 0 7px rgba(0,0,0,.28);opacity:.96}
+.card-head{display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.14);padding-bottom:12px;margin-bottom:12px}
+.icon{font-family:var(--body);font-size:1.55rem;width:38px;min-width:38px;height:38px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:rgba(12,32,41,.18);color:#8e9ca2;text-shadow:1px 1px 0 rgba(0,0,0,.9),-1px -1px 0 rgba(255,255,255,.13);box-shadow:inset 1px 1px 0 rgba(255,255,255,.07),inset -1px -1px 0 rgba(0,0,0,.62);opacity:.98}.icon.small{font-size:1.1rem;width:28px;min-width:28px;height:28px;border-radius:7px;margin-right:8px}.screen-title h2{display:flex;align-items:center;gap:7px}
+.card-title{font-size:1.35rem;line-height:1.1;font-family:var(--logo);letter-spacing:.01em}
+.card-sub{font-size:.74rem;font-weight:900;color:var(--muted);letter-spacing:.14em;text-transform:lowercase;margin-top:3px}
+.label{font-size:.72rem;font-weight:900;letter-spacing:.18em;text-transform:lowercase;color:var(--muted);margin:0 0 7px 4px}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{position:relative;display:flex;align-items:center}
+.field .prefix{position:absolute;left:15px;color:var(--muted);font-weight:900;font-size:1.2rem}
+.field .suffix{position:absolute;right:15px;color:var(--muted);font-weight:900;font-size:1.2rem}
+.num,.mini-num,.select{width:100%;background:linear-gradient(180deg,#10212a,#09161c);border:1px solid rgba(255,255,255,.07);border-radius:18px;min-height:62px;padding:10px 17px;font-weight:900;outline:none;box-shadow:inset 0 3px 9px rgba(0,0,0,.45),0 1px 0 rgba(255,255,255,.06)}
+.num{font-size:1.75rem}.num.money{padding-left:48px}.num.percent{padding-right:44px}.mini-num{font-size:1.55rem}.select{appearance:none;font-size:1.1rem;min-height:56px}
+.num:focus,.mini-num:focus,.select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(158,217,239,.14),inset 0 3px 9px rgba(0,0,0,.45)}
+.summary{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.13);display:grid;grid-template-columns:.9fr .75fr 1.25fr .9fr;gap:8px;align-items:end}
+.sumcell{background:rgba(12,32,41,.34);border:1px solid rgba(255,255,255,.075);border-radius:14px;padding:9px 8px;min-height:58px}
+.sumcell.primary{border-color:rgba(158,217,239,.32);background:rgba(12,32,41,.58);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 0 18px rgba(158,217,239,.08)}
+.sumlabel{font-size:.57rem;font-weight:900;letter-spacing:.12em;text-transform:lowercase;color:var(--muted)}
+.sumval{font-size:1.02rem;font-weight:900;color:var(--blue);margin-top:3px;line-height:1}.sumcell.primary .sumval{font-size:1.42rem;color:var(--blue)}
+.hero{text-align:center;padding:11px 14px}.hero .kicker{font-weight:900;letter-spacing:.18em;text-transform:lowercase;color:var(--muted);font-size:.68rem}.hero .big{font-size:clamp(1.95rem,8vw,3.25rem);font-weight:900;color:var(--blue);line-height:1;margin:4px 0}.hero .small{font-size:.88rem;font-weight:900;color:var(--txt)}.total-hero{margin-bottom:14px}.total-breakdown{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:7px;color:var(--muted);font-weight:900;font-size:.78rem;letter-spacing:.04em}.total-breakdown b{color:var(--txt)}
+.row{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.12);gap:16px}.row:last-child{border-bottom:none}
+.name{font-weight:900;font-size:1rem;color:var(--txt)}.value{font-weight:900;font-size:1.1rem;color:var(--txt);text-align:right}.highlight .name,.highlight .value{color:var(--blue)}
+.chip{margin-left:auto;background:rgba(12,32,41,.34);border:1px solid rgba(158,217,239,.14);border-radius:999px;padding:7px 9px;color:rgba(158,217,239,.82);font-weight:900;white-space:nowrap;font-size:.74rem}
+.split-row{display:grid;grid-template-columns:1fr .8fr;gap:12px;align-items:end;margin-top:12px}
+.each-pay .caption{font-weight:900;color:var(--blue);font-size:1rem}.each-pay .amount{font-weight:900;color:var(--blue);font-size:1.2rem}
+.tax-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.taxbox{background:rgba(12,32,41,.52);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:12px}.taxbox h3{font-size:.9rem;font-weight:900;color:var(--blue);letter-spacing:.1em;text-transform:lowercase;margin-bottom:8px}
+.results{background:rgba(12,32,41,.52);border:1px solid rgba(255,255,255,.09);border-radius:20px;padding:10px 14px;margin-top:12px}
+.result-line{display:flex;justify-content:space-between;gap:18px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1)}.result-line:last-child{border-bottom:none}.result-line .u{font-weight:900;color:var(--muted);text-transform:lowercase}.result-line .r{font-weight:900;color:var(--blue);text-align:right}
+.hint{text-align:center;color:#8ea0a8;font-weight:900;letter-spacing:.14em;text-transform:lowercase;font-size:.68rem;margin-top:16px}
+.drawer-grid{display:grid;gap:12px;margin-top:6px}.drawer-card{text-align:left;width:100%;display:flex;align-items:center;gap:12px;cursor:pointer}.drawer-card .drawer-name{font-family:var(--logo);font-size:1.45rem}.drawer-card .drawer-note{font-weight:900;color:var(--muted);font-size:.74rem;letter-spacing:.12em;text-transform:lowercase}.drawer-view{display:none}.drawer-view.active{display:block}.hub{display:none}.hub.active{display:block}
+.drawer-handle{position:fixed;left:14px;bottom:calc(15px + env(safe-area-inset-bottom));z-index:20;border:1px solid rgba(255,255,255,.09);background:linear-gradient(180deg,rgba(58,76,86,.42),rgba(20,34,42,.72));box-shadow:inset 1px 1px 0 rgba(255,255,255,.09),inset -1px -1px 0 rgba(0,0,0,.72),0 9px 20px rgba(0,0,0,.3);border-radius:18px;padding:12px 17px;font-family:var(--logo);font-weight:400;color:#91a0a6;text-shadow:1px 1px 0 rgba(0,0,0,.9),-1px -1px 0 rgba(255,255,255,.14);letter-spacing:.02em;text-transform:lowercase}
+.drawer-handle:active{transform:translateY(2px)}
+.drawer-handle.hidden{display:none}
+.calc-display{height:132px;background:rgba(12,32,41,.52);border:1px solid rgba(158,217,239,.22);border-radius:26px;margin-bottom:16px;padding:16px;display:flex;flex-direction:column;align-items:flex-end;justify-content:flex-end;overflow:hidden}
+.calc-expr{min-height:1.4rem;font-size:1.05rem;font-weight:900;color:var(--muted);letter-spacing:.04em;margin-bottom:8px;text-align:right;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.calc-main{font-size:2.6rem;font-weight:900;line-height:1;color:var(--txt);text-align:right;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.btn{border:1px solid rgba(158,217,239,.2);background:linear-gradient(180deg,rgba(72,94,105,.85),rgba(31,49,58,.9));box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 7px 18px rgba(0,0,0,.18);border-radius:20px;min-height:64px;font-size:1.8rem;font-weight:900}.btn:active{transform:scale(.96)}.btn.op{color:var(--blue)}.btn.eq{background:var(--blue);color:#0b1a21}.btn.clear{color:var(--muted)}.btn.zero{grid-column:span 2}
+@media(max-width:430px){.screen{padding:12px 13px 86px}.top{padding:13px 13px 8px}.card,.drawer-card{border-radius:23px;padding:14px}.num{font-size:1.55rem;min-height:58px}.mini-num{font-size:1.35rem;min-height:56px}.tax-grid{gap:10px}.card-title{font-size:1.23rem}.hero .big{font-size:3.65rem}.row{padding:8px 0}.name{font-size:.92rem}.value{font-size:1rem}.chip{display:none}.calc-display{height:118px}.calc-main{font-size:2.25rem}.calc-expr{font-size:.95rem}.btn{min-height:60px}.summary{grid-template-columns:1fr 1fr}.sumcell.primary{grid-column:1/-1}.sumcell.primary .sumval{font-size:1.75rem}.hero .big{font-size:2.35rem}}
+
+/* --- final middle Bauhaus enforcement / iOS-safe font patch --- */
+.logo h1,
+.card-title,
+.drawer-card .drawer-name,
+.drawer-handle,
+.etched,
+.screen-title h2{
+  font-family:"BillBauhausMid","Bauhaus-Thin","BillBauhausLight",system-ui,sans-serif!important;
+  font-weight:400!important;
+  -webkit-font-smoothing:antialiased;
+}
+.logo h1{letter-spacing:.012em;}
+.drawer-card .drawer-name{font-size:1.76rem;letter-spacing:.012em;}
+
+/* --- logo: middle Bauhaus only --- */
+.logo h1{
+  font-family:"BillBauhausMid","Bauhaus-Thin","BillBauhausLight",system-ui,sans-serif!important;
+  font-weight:400!important;
+  letter-spacing:.012em!important;
+}
+
+</style>
+
+<style>
+/* --- surgical strike: full-width machined drawer fronts --- */
+.hub .drawer-grid{
+  display:block;
+  margin:10px 0 0;
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid rgba(158,217,239,.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    inset 0 -1px 0 rgba(0,0,0,.7),
+    0 18px 34px rgba(0,0,0,.28);
+  background:linear-gradient(180deg,rgba(20,35,43,.72),rgba(9,20,26,.78));
+}
+.hub .drawer-card{
+  width:100%;
+  margin:0;
+  min-height:86px;
+  border:0;
+  border-radius:0;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:17px 19px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.065),rgba(255,255,255,0) 18%),
+    linear-gradient(180deg,rgba(70,93,104,.9),rgba(33,52,61,.96));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 -2px 0 rgba(0,0,0,.58),
+    inset 0 -10px 18px rgba(0,0,0,.12);
+  position:relative;
+}
+.hub .drawer-card + .drawer-card{
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.hub .drawer-card::before{
+  content:"";
+  position:absolute;
+  left:18px;
+  right:18px;
+  top:9px;
+  height:3px;
+  border-radius:99px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.13),transparent);
+  opacity:.55;
+}
+.hub .drawer-card::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:5px;
+  background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.36));
+  pointer-events:none;
+}
+.hub .drawer-card:active{
+  transform:translateY(1px);
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,0) 16%),
+    linear-gradient(180deg,rgba(53,75,86,.95),rgba(25,42,50,.98));
+}
+.hub .drawer-card .icon{
+  border-radius:8px;
+  background:rgba(8,21,28,.28);
+  box-shadow:
+    inset 1px 1px 0 rgba(255,255,255,.10),
+    inset -1px -1px 0 rgba(0,0,0,.72);
+}
+.hub .drawer-card .drawer-name{
+  font-size:1.68rem;
+  line-height:1;
+}
+.hub .drawer-card .drawer-note{
+  margin-top:6px;
+}
+@media(max-width:430px){
+  .hub .drawer-grid{
+    margin:8px -2px 0;
+    border-radius:10px;
+  }
+  .hub .drawer-card{
+    min-height:84px;
+    padding:16px 17px;
+  }
+  .hub .drawer-card .drawer-name{
+    font-size:1.58rem;
+  }
+}
+</style>
+
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="logo" id="logo"><h1><span class="white">bill's </span><span class="blue">brain</span></h1><div class="logo-line"></div><div class="subtitle" id="subtitle">money & percent</div></div>
+  <section class="card" id="pctPanel">
+    <div class="input-row">
+      <div><div class="label">base amount</div><div class="field"><span class="prefix">$</span><input id="baseInput" class="num money" type="number" inputmode="decimal" placeholder="0.00"></div></div>
+      <div><div class="label">percentage</div><div class="field"><input id="pctInput" class="num percent" type="number" inputmode="decimal" placeholder="0"><span class="suffix">%</span></div></div>
+    </div>
+    <div class="summary"><div class="sumcell"><div class="sumlabel">amount</div><div class="sumval" id="sumBase">$0.00</div></div><div class="sumcell"><div class="sumlabel">rate</div><div class="sumval" id="sumRate">0.00%</div></div><div class="sumcell primary"><div class="sumlabel">result</div><div class="sumval" id="sumDelta">$0.00</div></div><div class="sumcell"><div class="sumlabel">remaining</div><div class="sumval" id="sumRem">$0.00</div></div></div>
+  </section>
+</header>
+<main class="deck" id="deck">
+<section class="screen" data-name="calc"><div class="screen-inner"><div class="screen-title"><h2 class="etched"><span class="icon small">▦</span>calculator</h2><span>side utility</span></div><div class="calc-display"><div class="calc-expr" id="calcExpr"></div><div class="calc-main" id="calcDisplay">0</div></div><div class="calc-grid"><button class="btn clear" data-calc="clear">AC</button><button class="btn" data-calc="back">⌫</button><button class="btn op" data-op="%">%</button><button class="btn op" data-op="÷">÷</button><button class="btn" data-num="7">7</button><button class="btn" data-num="8">8</button><button class="btn" data-num="9">9</button><button class="btn op" data-op="×">×</button><button class="btn" data-num="4">4</button><button class="btn" data-num="5">5</button><button class="btn" data-num="6">6</button><button class="btn op" data-op="−">−</button><button class="btn" data-num="1">1</button><button class="btn" data-num="2">2</button><button class="btn" data-num="3">3</button><button class="btn op" data-op="+">+</button><button class="btn zero" data-num="0">0</button><button class="btn" data-calc="dot">.</button><button class="btn eq" data-calc="equals">=</button></div><p class="hint">swipe right for brain</p></div></section>
+
+<section class="screen" data-name="main"><div class="screen-inner">
+  <div id="hub" class="hub">
+    <div class="screen-title"><h2 class="etched">drawers</h2><span>choose tool</span></div>
+    <div class="drawer-grid">
+      <button class="drawer-card" data-open="money"><div class="icon">%</div><div><div class="drawer-name etched">money & percent</div><div class="drawer-note">percentage · tip · split · tax</div></div></button>
+      <button class="drawer-card" data-open="measure"><div class="icon">▱</div><div><div class="drawer-name etched">measurements</div><div class="drawer-note">length · weight</div></div></button>
+      <button class="drawer-card" data-open="tempvol"><div class="icon">°</div><div><div class="drawer-name etched">temp & volume</div><div class="drawer-note">weather · kitchen</div></div></button>
+      <button class="drawer-card" data-open="speedarea"><div class="icon">◺</div><div><div class="drawer-name etched">speed & area</div><div class="drawer-note">speed · dimensions · square footage</div></div></button>
+    </div>
+    <p class="hint">calculator is one swipe left</p>
+  </div>
+  <div id="money" class="drawer-view active">
+    <div class="card hero total-hero"><div class="kicker">total after percentage</div><div class="big" id="heroResult">$0.00</div><div class="small" id="heroSub">base plus result</div><div class="total-breakdown"><span id="totalBaseSmall">$0.00</span><span>+</span><b id="totalResultSmall">$0.00</b></div></div>
+    <div class="card"><div class="card-head"><div class="icon">∥</div><div><div class="card-title etched">tip & split</div><div class="card-sub">tip total and even split</div></div><div class="chip" id="tipBaseChip">base $0.00</div></div><div class="row"><span class="name">calculated tip</span><span class="value" id="tipAmt">$0.00</span></div><div class="row highlight"><span class="name">total with tip</span><span class="value" id="tipTotal">$0.00</span></div><div class="split-row"><div><div class="label">split between</div><input id="splitInput" class="mini-num" type="number" inputmode="numeric" min="1" placeholder="1"></div><div class="each-pay"><div class="caption">each pays</div><div class="amount" id="eachPays">$0.00</div></div></div></div>
+    <div class="card"><div class="card-head"><div class="icon">▢</div><div><div class="card-title etched">retail checkout</div><div class="card-sub">nj & pa tax · optional discount</div></div><div class="chip" id="retailBaseChip">base $0.00</div></div><div><div class="label">discount %</div><div class="field" style="max-width:230px"><input id="discInput" class="num percent" style="min-height:56px;font-size:1.45rem" type="number" inputmode="decimal" placeholder="0"><span class="suffix">%</span></div></div><div class="tax-grid"><div class="taxbox"><h3>new jersey · 6.625%</h3><div class="row"><span class="name">price</span><span class="value" id="njPrice">$0.00</span></div><div class="row"><span class="name" style="color:var(--green)">saved</span><span class="value" style="color:var(--green)" id="njSaved">$0.00</span></div><div class="row"><span class="name">tax</span><span class="value" id="njTax">$0.00</span></div><div class="row highlight"><span class="name">total</span><span class="value" id="njTotal">$0.00</span></div></div><div class="taxbox"><h3>pennsylvania · 6%</h3><div class="row"><span class="name">price</span><span class="value" id="paPrice">$0.00</span></div><div class="row"><span class="name" style="color:var(--green)">saved</span><span class="value" style="color:var(--green)" id="paSaved">$0.00</span></div><div class="row"><span class="name">tax</span><span class="value" id="paTax">$0.00</span></div><div class="row highlight"><span class="name">total</span><span class="value" id="paTotal">$0.00</span></div></div></div></div>
+  </div>
+  <div id="measure" class="drawer-view">
+    <div class="card converter"><div class="card-head"><div class="icon">▱</div><div><div class="card-title etched">length</div><div class="card-sub">choose what your number means</div></div></div><div class="input-row"><div><div class="label">value</div><input id="lenVal" class="mini-num" type="number" inputmode="decimal" placeholder="0"></div><div><div class="label">unit</div><select id="lenUnit" class="select"><option value="in">inches</option><option value="ft">feet</option><option value="yd">yards</option><option value="mi">miles</option><option value="mm">millimeters</option><option value="cm">centimeters</option><option value="m">meters</option><option value="km">kilometers</option></select></div></div><div class="results" id="lenResults"></div></div>
+    <div class="card converter"><div class="card-head"><div class="icon">⚖︎</div><div><div class="card-title etched">weight</div><div class="card-sub">pounds, ounces, grams, kilograms, tons</div></div></div><div class="input-row"><div><div class="label">value</div><input id="wtVal" class="mini-num" type="number" inputmode="decimal" placeholder="0"></div><div><div class="label">unit</div><select id="wtUnit" class="select"><option value="lb">pounds</option><option value="oz">ounces</option><option value="kg">kilograms</option><option value="g">grams</option><option value="ton_us">tons (US)</option><option value="tonne">metric tonnes</option></select></div></div><div class="results" id="wtResults"></div></div>
+  </div>
+  <div id="tempvol" class="drawer-view">
+    <div class="card converter"><div class="card-head"><div class="icon">°</div><div><div class="card-title etched">temperature</div><div class="card-sub">fahrenheit and celsius</div></div></div><div class="input-row"><div><div class="label">value</div><input id="tempVal" class="mini-num" type="number" inputmode="decimal" placeholder="0"></div><div><div class="label">unit</div><select id="tempUnit" class="select"><option value="f">fahrenheit</option><option value="c">celsius</option></select></div></div><div class="results" id="tempResults"></div></div>
+    <div class="card converter"><div class="card-head"><div class="icon">▽</div><div><div class="card-title etched">volume</div><div class="card-sub">pinch, dash, tsp, tbsp, cups, pints, quarts</div></div></div><div class="input-row"><div><div class="label">value</div><input id="volVal" class="mini-num" type="number" inputmode="decimal" placeholder="0"></div><div><div class="label">unit</div><select id="volUnit" class="select"><option value="pinch">pinches (approx)</option><option value="dash">dashes (approx)</option><option value="tsp">teaspoons</option><option value="tbsp">tablespoons</option><option value="floz">fluid ounces</option><option value="cup">cups</option><option value="pt">pints</option><option value="qt">quarts</option><option value="gal">gallons</option><option value="ml">milliliters</option><option value="l">liters</option></select></div></div><div class="results" id="volResults"></div></div>
+  </div>
+  <div id="speedarea" class="drawer-view">
+    <div class="card converter"><div class="card-head"><div class="icon">◜</div><div><div class="card-title etched">speed</div><div class="card-sub">mph and kph</div></div></div><div class="input-row"><div><div class="label">value</div><input id="spdVal" class="mini-num" type="number" inputmode="decimal" placeholder="0"></div><div><div class="label">unit</div><select id="spdUnit" class="select"><option value="mph">mph</option><option value="kph">kph</option></select></div></div><div class="results" id="spdResults"></div></div>
+    <div class="card converter"><div class="card-head"><div class="icon">◺</div><div><div class="card-title etched">area</div><div class="card-sub">length × width</div></div></div><div class="input-row"><div><div class="label">length</div><input id="dimA" class="mini-num" type="number" inputmode="decimal" placeholder="0"></div><div><div class="label">width</div><input id="dimB" class="mini-num" type="number" inputmode="decimal" placeholder="0"></div></div><div><div class="label">unit</div><select id="dimUnit" class="select"><option value="in">inches</option><option value="ft">feet</option><option value="yd">yards</option><option value="cm">centimeters</option><option value="m">meters</option><option value="km">kilometers</option></select></div><div class="results" id="dimResults"></div></div>
+  </div>
+</div></section>
+</main>
+<button id="drawerBtn" class="drawer-handle">◀ drawers</button>
+</div>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id), money=n=>'$'+(Number.isFinite(n)?n:0).toFixed(2), pct=n=>(Number.isFinite(n)?n:0).toFixed(2)+'%', val=id=>parseFloat($(id)?.value)||0, set=(id,t)=>{if($(id))$(id).textContent=t};
+const num=(n,d=2)=>{n=Number.isFinite(n)?n:0; if(Math.abs(n)>=1000)return n.toLocaleString(undefined,{maximumFractionDigits:d}); return n.toFixed(d).replace(/\.00$/,'')};
+const deck=$('deck'), pctPanel=$('pctPanel'), subtitle=$('subtitle'), logo=$('logo'); let activeDrawer='money';
+function setLogo(alt){ logo.classList.toggle('alt', !!alt); }
+function recalc(){const b=val('baseInput'), p=val('pctInput'), d=b*p/100, rem=b-d, split=Math.max(1,Math.floor(val('splitInput')||1)), disc=Math.max(0,val('discInput')), sub=Math.max(0,b-(b*disc/100)), saved=b-sub, njTax=sub*.06625, paTax=sub*.06; set('sumBase',money(b));set('sumRate',pct(p));set('sumDelta',money(d));set('sumRem',money(rem));set('heroResult',money(b+d));set('heroSub','total after adding '+pct(p));set('totalBaseSmall',money(b));set('totalResultSmall',money(d));set('tipAmt',money(d));set('tipTotal',money(b+d));set('eachPays',money((b+d)/split));set('tipBaseChip','base '+money(b));set('retailBaseChip','base '+money(b));set('njPrice',money(sub));set('paPrice',money(sub));set('njSaved',money(saved));set('paSaved',money(saved));set('njTax',money(njTax));set('paTax',money(paTax));set('njTotal',money(sub+njTax));set('paTotal',money(sub+paTax));}
+['baseInput','pctInput','splitInput','discInput'].forEach(id=>$(id)?.addEventListener('input',recalc));
+function rows(id, arr){$(id).innerHTML=arr.map(([u,r])=>`<div class="result-line"><span class="u">${u}</span><span class="r">${r}</span></div>`).join('')}
+function recalcLen(){const v=val('lenVal'), u=$('lenUnit').value; const meters={mm:v/1000,cm:v/100,m:v,km:v*1000,in:v*.0254,ft:v*.3048,yd:v*.9144,mi:v*1609.344}[u]; rows('lenResults',[['inches',num(meters/.0254)+' in'],['feet',num(meters/.3048)+' ft'],['yards',num(meters/.9144)+' yd'],['miles',num(meters/1609.344,4)+' mi'],['millimeters',num(meters*1000)+' mm'],['centimeters',num(meters*100)+' cm'],['meters',num(meters)+' m'],['kilometers',num(meters/1000,4)+' km']])}
+function recalcWt(){const v=val('wtVal'), u=$('wtUnit').value; const kg={lb:v*.45359237,oz:v*.028349523125,kg:v,g:v/1000,ton_us:v*907.18474,tonne:v*1000}[u]||0; rows('wtResults',[['pounds',num(kg/0.45359237)+' lb'],['ounces',num(kg/0.028349523125)+' oz'],['kilograms',num(kg)+' kg'],['grams',num(kg*1000)+' g'],['tons (US)',num(kg/907.18474,4)+' tons'],['metric tonnes',num(kg/1000,4)+' t']])}
+function recalcTemp(){const v=val('tempVal'), u=$('tempUnit').value; const c=u==='f'?(v-32)*5/9:v, f=c*9/5+32; rows('tempResults',[['fahrenheit',num(f)+' °F'],['celsius',num(c)+' °C']])}
+function recalcVol(){const v=val('volVal'), u=$('volUnit').value; const ml={pinch:v*0.308057599625,dash:v*0.61611519925,tsp:v*4.928921594,tbsp:v*14.786764781,floz:v*29.5735295625,cup:v*236.5882365,pt:v*473.176473,qt:v*946.352946,gal:v*3785.411784,ml:v,l:v*1000}[u]||0; rows('volResults',[['pinches (approx)',num(ml/0.308057599625)+' pinch'],['dashes (approx)',num(ml/0.61611519925)+' dash'],['teaspoons',num(ml/4.928921594)+' tsp'],['tablespoons',num(ml/14.786764781)+' tbsp'],['fluid ounces',num(ml/29.5735295625)+' fl oz'],['cups',num(ml/236.5882365)+' cups'],['pints',num(ml/473.176473)+' pt'],['quarts',num(ml/946.352946)+' qt'],['gallons',num(ml/3785.411784)+' gal'],['milliliters',num(ml)+' ml'],['liters',num(ml/1000)+' L']])}
+function recalcSpd(){const v=val('spdVal'), u=$('spdUnit').value; const mph=u==='kph'?v/1.609344:v; rows('spdResults',[['mph',num(mph)+' mph'],['kph',num(mph*1.609344)+' kph']])}
+function recalcDim(){const a=val('dimA'), b=val('dimB'), u=$('dimUnit').value; const toM={in:.0254,ft:.3048,yd:.9144,cm:.01,m:1,km:1000}[u]; const area=a*toM*b*toM; rows('dimResults',[['square inches',num(area/.00064516)+' sq in'],['square feet',num(area/.09290304)+' sq ft'],['square yards',num(area/.83612736)+' sq yd'],['square meters',num(area)+' sq m'],['acres',num(area/4046.8564224,4)+' acres'],['hectares',num(area/10000,4)+' ha'],['square kilometers',num(area/1000000,6)+' sq km']])}
+[['lenVal',recalcLen],['lenUnit',recalcLen],['wtVal',recalcWt],['wtUnit',recalcWt],['tempVal',recalcTemp],['tempUnit',recalcTemp],['volVal',recalcVol],['volUnit',recalcVol],['spdVal',recalcSpd],['spdUnit',recalcSpd],['dimA',recalcDim],['dimB',recalcDim],['dimUnit',recalcDim]].forEach(([id,fn])=>$(id)?.addEventListener('input',fn));
+function openDrawer(id){const db=$('drawerBtn'); if(db) db.classList.remove('hidden'); activeDrawer=id; $('hub').classList.remove('active'); document.querySelectorAll('.drawer-view').forEach(el=>el.classList.toggle('active',el.id===id)); const names={money:'money & percent',measure:'measurements',tempvol:'temp & volume',speedarea:'speed & area'}; subtitle.textContent=names[id]||'bill’s brain'; pctPanel.style.display=id==='money'?'block':'none'; setLogo(id==='measure'||id==='speedarea'); document.querySelector('.screen[data-name="main"]').scrollTop=0}
+function showHub(){const db=$('drawerBtn'); if(db) db.classList.remove('hidden'); document.querySelectorAll('.drawer-view').forEach(el=>el.classList.remove('active')); $('hub').classList.add('active'); subtitle.textContent='drawers'; pctPanel.style.display='none'; setLogo(false); document.querySelector('.screen[data-name="main"]').scrollTop=0}
+document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>openDrawer(b.dataset.open))); $('drawerBtn').addEventListener('click',()=>{ if($('hub').classList.contains('active')) openDrawer(activeDrawer||'money'); else showHub();});
+let cur='0', prev=null, op=null, just=false, lastExpr='';
+const nice=n=>{if(!Number.isFinite(n))return'0'; const s=String(Number(n.toFixed(10))); return s.length>14?Number(n).toPrecision(9):s};
+function calcSymbol(o){return o==='−'?'-':o}
+function formatCalcValue(value){
+  const raw=String(value??'0');
+  if(raw===''||raw==='-') return raw||'0';
+  if(/[eE]/.test(raw)){
+    const n=Number(raw);
+    return Number.isFinite(n)?n.toLocaleString('en-US',{maximumFractionDigits:10}):raw;
+  }
+  const negative=raw.startsWith('-');
+  const unsigned=negative?raw.slice(1):raw;
+  const parts=unsigned.split('.');
+  const integer=(parts[0]||'0').replace(/^0+(?=\d)/,'');
+  const grouped=integer.replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  return (negative?'-':'')+grouped+(parts.length>1?'.'+parts[1]:'');
+}
+function formatExpression(expr){
+  if(!expr) return '';
+  return expr.replace(/-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g,m=>formatCalcValue(m));
+}
+function show(){
+  const rawMain = cur==='' && prev!==null ? nice(prev) : (cur || '0');
+  set('calcDisplay',formatCalcValue(rawMain));
+  let expr='';
+  if(op!==null && prev!==null){expr = nice(prev)+' '+calcSymbol(op)+(cur!==''?' '+cur:'');}
+  else if(just && lastExpr){expr = lastExpr;}
+  set('calcExpr',formatExpression(expr));
+}
+function calcNum(n){
+  if(just){cur='0'; prev=null; op=null; just=false; lastExpr=''}
+  cur=(cur===''||cur==='0')?n:(cur+n);
+  if(cur.length>14)cur=cur.slice(0,14);
+  show();
+}
+function calcOp(o){
+  if(op!==null && cur!=='') calcEq(true);
+  prev=parseFloat(cur===''?'0':cur)||0;
+  op=o; cur=''; just=false; lastExpr=''; show();
+}
+function calcEq(keepChain=false){
+  if(op===null||prev===null||cur==='')return;
+  const b=parseFloat(cur)||0; let r=prev;
+  if(op==='+')r=prev+b; if(op==='−')r=prev-b; if(op==='×')r=prev*b; if(op==='÷')r=b===0?0:prev/b; if(op==='%')r=prev*(b/100);
+  lastExpr=nice(prev)+' '+calcSymbol(op)+' '+nice(b)+' =';
+  cur=nice(r); prev=null; op=null; just=!keepChain; show();
+}
+document.querySelectorAll('[data-num]').forEach(btn=>btn.addEventListener('click',()=>calcNum(btn.dataset.num)));
+document.querySelectorAll('[data-op]').forEach(btn=>btn.addEventListener('click',()=>calcOp(btn.dataset.op)));
+document.querySelectorAll('[data-calc]').forEach(btn=>btn.addEventListener('click',()=>{
+  const c=btn.dataset.calc;
+  if(c==='clear'){cur='0';prev=null;op=null;just=false;lastExpr=''}
+  if(c==='back'){if(just){cur='0';just=false;lastExpr=''} else cur=cur.length>1?cur.slice(0,-1):'0'}
+  if(c==='dot'){if(just){cur='0';just=false;lastExpr=''} if(cur==='')cur='0'; if(!cur.includes('.'))cur+='.'}
+  if(c==='equals')calcEq(false);
+  show();
+}));
+function home(){deck.style.scrollBehavior='auto'; deck.scrollLeft=deck.clientWidth; setTimeout(()=>{deck.scrollLeft=deck.clientWidth; deck.style.scrollBehavior='smooth'},60)}
+deck.addEventListener('scroll',()=>{const i=Math.round(deck.scrollLeft/deck.clientWidth); const db=$('drawerBtn'); if(i===0){subtitle.textContent='calculator'; pctPanel.style.display='none'; setLogo(true); if(db) db.classList.add('hidden')} else {if(db) db.classList.remove('hidden'); if(!$('hub').classList.contains('active')) openDrawer(activeDrawer||'money')}},{passive:true});
+recalc();recalcLen();recalcWt();recalcTemp();recalcVol();recalcSpd();recalcDim();show();openDrawer('money'); if(document.readyState==='complete')home(); else window.addEventListener('load',home); window.addEventListener('resize',()=>{deck.scrollLeft=deck.clientWidth});
+})();
+</script>
+</body>
+</html>
